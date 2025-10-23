@@ -26,7 +26,7 @@ public class ProjectInterfacesApplication extends Application {
         
         ChangePasswordController controller = loader.getController();
         
-        controller.init(stage);
+        controller.init(stage,root);
         
         Scene scene = new Scene(root);
         
@@ -39,6 +39,7 @@ public class ProjectInterfacesApplication extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+        
     }
     
 }
