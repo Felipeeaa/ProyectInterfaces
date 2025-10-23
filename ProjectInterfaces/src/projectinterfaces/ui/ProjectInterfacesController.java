@@ -6,7 +6,12 @@
 package projectinterfaces.ui;
 
 import java.util.logging.Logger;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -29,8 +34,10 @@ public class ProjectInterfacesController {
     private Button Boton;
     private static final Logger LOGGER=Logger.getLogger("projectinterfaces.ui");
 
-    public void init(Stage stage) {
+    public void init(Stage stage, Parent root) {
         LOGGER.info("Initializing window");
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
         //Establecer el titulo de la ventana
         stage.setTitle("Sign In");
         //• La tabla de usuarios mostrará la información de todos los usuarios existentes.
@@ -42,7 +49,44 @@ public class ProjectInterfacesController {
         //• La combo Perfil se carga con las descripciones de los diferentes perfiles de usuario.
         //• La combo Departamento se carga con los nombres de los diferentes departamentos.
         //• El botón Salir estará habilitado.
-        //• Se enfoca el campo login.*/
+        //• Se enfoca el campo login.
+        
+        //Asociar eventos a manejadores
+        Boton.setOnAction(this::handleBotonOnAction);
+        //Asociación de manejadores a properties
+        Email.textProperty().addListener(this::handleEmailTextChange);
+        Password.focusedProperty().addListener(this::handlePasswordFochusChange);
+        //Mostrar la ventana
+        
+        stage.show();
     }
+    private void handleBotonOnAction(ActionEvent event){
+        
+    }
+    /**
+     * 
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
+    private void handleEmailTextChange(ObservableValue observable, 
+                                       String oldValue,
+                                       String newValue){
+        
+    }
+    /**
+     * 
+     * @param observable este metodo sirve para ver que hay en el campo texto
+     * @param oldValue este metodo sirve para
+     * @param newValue  este metodo sirve para
+     */
+    private void handlePasswordFochusChange(ObservableValue observable, 
+                                            Boolean oldValue, 
+                                            Boolean newValue){
+        if(!newValue){
+            
+        }
+    }
+    
 }
 
