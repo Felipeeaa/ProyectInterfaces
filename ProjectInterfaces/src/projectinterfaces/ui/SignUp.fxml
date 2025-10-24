@@ -6,13 +6,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" 
-      style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="projectinterfaces.ui.SignUpController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectinterfaces.ui.SignUpController">
    <children>
       <TextField fx:id="tfName" layoutX="329.0" layoutY="262.0" prefHeight="25.0" prefWidth="157.0" promptText="Michael" />
-      <TextField fx:id="tfSurName" layoutX="603.0" layoutY="262.0" prefHeight="25.0" prefWidth="70.0" promptText="D." />
-      <TextField fx:id="tfMidInit" layoutX="331.0" layoutY="306.0" prefHeight="25.0" prefWidth="340.0" promptText="Schmich" />
+      <TextField fx:id="tfMidInit" layoutX="603.0" layoutY="262.0" prefHeight="25.0" prefWidth="70.0" promptText="D." />
+      <TextField fx:id="tfSurName" layoutX="331.0" layoutY="306.0" prefHeight="25.0" prefWidth="340.0" promptText="Schmich" />
       <TextField fx:id="tfState" layoutX="331.0" layoutY="348.0" prefHeight="25.0" prefWidth="212.0" promptText="Florida" />
       <TextField fx:id="tfCity" layoutX="331.0" layoutY="436.0" prefHeight="25.0" prefWidth="340.0" promptText="Santa rosa beach" />
       <TextField fx:id="tfAdress" layoutX="331.0" layoutY="389.0" prefHeight="25.0" prefWidth="340.0" promptText="58 Charming Way, Santa Rosa Beach, FL 32459" />
@@ -64,5 +62,6 @@
             <Tooltip text="Password must contain:&#10;* More than 5 characters&#10;* Less than 30 characters&#10;* At least one upper case&#10;* At least one number" />
          </tooltip>
       </Label>
+      <Label fx:id="errorLabel" layoutX="428.0" layoutY="227.0" prefHeight="15.0" prefWidth="169.0" />
    </children>
 </Pane>

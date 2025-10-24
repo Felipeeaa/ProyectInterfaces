@@ -21,11 +21,8 @@ public class SignUpApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/SignUp.fxml"));
-        
         Parent root = (Parent)loader.load();
-        
         SignUpController controller = loader.getController();
-        Scene scene = new Scene(root);
         controller.init(stage, root);
         
         
