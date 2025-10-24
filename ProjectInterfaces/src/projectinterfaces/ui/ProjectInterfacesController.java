@@ -1,0 +1,98 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package projectinterfaces.ui;
+
+import java.util.logging.Logger;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+/**
+ *
+ * @author felipe
+ */
+public class ProjectInterfacesController {
+    @FXML
+    private TextField Email;
+    @FXML
+    private PasswordField Password;
+    @FXML
+    private Hyperlink Hiperenlace;
+    @FXML
+    private Button Login;
+    @FXML
+    private Button Exit;
+    private static final Logger LOGGER=Logger.getLogger("projectinterfaces.ui");
+
+    public void init(Stage stage, Parent root) {
+        
+        LOGGER.info("Initializing window");
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        //Establecer el titulo de la ventana
+        stage.setTitle("Sign In");
+        //• La tabla de usuarios mostrará la información de todos los usuarios existentes.
+        stage.setResizable(false);
+        //• Los botones Crear, Modificar y Eliminar se deshabilitan.
+        Login.setDisable(true);
+        Exit.setDisable(true);
+        //• Los campos Login y Nombre están habilitados.
+        
+        //• El botón Salir estará habilitado.
+        Exit.setOnAction(this::handleExitOnAction);
+        //• Se enfoca el campo login.
+        
+        //Asociar eventos a manejadores
+        Login.setOnAction(this::handleLoginOnAction);
+        //Asociación de manejadores a properties
+        Email.textProperty().addListener(this::handleEmailTextChange);
+        Password.focusedProperty().addListener(this::handlePasswordFochusChange);
+        //Mostrar la ventana
+        
+        stage.show();
+    }
+    private void handleLoginOnAction(ActionEvent event){
+        
+    }
+    private void handleExitOnAction(ActionEvent event){
+        
+    }
+    /**
+     * 
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
+    private void handleEmailTextChange(ObservableValue observable, 
+                                       String oldValue,
+                                       String newValue){
+        
+    }
+    /**
+     * 
+     * @param observable este metodo sirve para ver que hay en el campo texto
+     * @param oldValue este metodo sirve para
+     * @param newValue  este metodo sirve para
+     */
+    private void handlePasswordFochusChange(ObservableValue observable, 
+                                            Boolean oldValue, 
+                                            Boolean newValue){
+        if(!newValue){
+            
+        }
+    }
+    
+}
+
