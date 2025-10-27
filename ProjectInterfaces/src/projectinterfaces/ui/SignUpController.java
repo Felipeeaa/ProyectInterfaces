@@ -51,7 +51,21 @@ public class SignUpController {
     @FXML
     private Hyperlink hlhyperlink;
     @FXML
-    private Label errorLabel;
+    private Label errorLabelName;
+    @FXML
+    private Label errorLabelSurName;
+    @FXML
+    private Label errorLabelState;
+    @FXML
+    private Label errorLabelStreet;
+    @FXML
+    private Label errorLabelCity;
+    @FXML
+    private Label errorLabelEmail;
+    @FXML
+    private Label errorLabelPhone;
+    @FXML
+    private Label errorLabelPassw;
     private static final Logger LOGGER=Logger.getLogger("projectinterfaces.ui");
 
     public void init(Stage stage, Parent root) {
@@ -104,12 +118,14 @@ public class SignUpController {
                 if (!valid){
                     throw new Exception("Name format not valid");
                 }
-                tfName.setStyle("-fx-border-color:green"); 
+                tfName.setStyle("-fx-border-color:green");
+                errorLabelName.setText("");
             }
         }
         catch (Exception e){
             tfName.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-            errorLabel.setText(e.getMessage());
+            errorLabelName.setText(e.getMessage());
+            errorLabelName.setStyle("-fx-text-fill: red");
             LOGGER.info(e.getMessage());
         }
     }
@@ -130,11 +146,13 @@ public class SignUpController {
                     throw new Exception("Surname format not valid");
                 }
                 tfSurName.setStyle("-fx-border-color:green"); 
+                errorLabelSurName.setText("");
             }
         }
         catch (Exception e){
             tfSurName.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-            errorLabel.setText(e.getMessage());
+            errorLabelSurName.setText(e.getMessage());
+            errorLabelSurName.setStyle("-fx-text-fill: red");
             LOGGER.info(e.getMessage());
         }
     }
@@ -152,12 +170,15 @@ public class SignUpController {
             if(!valid){
                 throw new Exception("Middle initial format invalid");
                 }
+            tfMidInit.setStyle("-fx-border-color:green");
+            errorLabelName.setText("");
             }
-            tfMidInit.setStyle("-fx-border-color:green"); 
+             
         }
         catch (Exception e){
             tfMidInit.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-            errorLabel.setText(e.getMessage());
+            errorLabelName.setText(e.getMessage());
+            errorLabelName.setStyle("-fx-text-fill: red");
             LOGGER.info(e.getMessage());
         }
         
@@ -179,11 +200,13 @@ public class SignUpController {
                     throw new Exception("State format not valid");
                 }
                 tfState.setStyle("-fx-border-color:green");
+                errorLabelState.setText("");
             }
         }
         catch(Exception e){
             tfState.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-            errorLabel.setText(e.getMessage());
+            errorLabelState.setText(e.getMessage());
+            errorLabelState.setStyle("-fx-text-fill: red");
             LOGGER.info(e.getMessage());
         }
         
@@ -204,11 +227,13 @@ public class SignUpController {
                     throw new Exception("City format not valid");
                 }
                 tfCity.setStyle("-fx-border-color:green");
+                errorLabelCity.setText("");
             }
         }
         catch(Exception e){
             tfCity.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-            errorLabel.setText(e.getMessage());
+            errorLabelCity.setText(e.getMessage());
+            errorLabelCity.setStyle("-fx-text-fill: red");
             LOGGER.info(e.getMessage());
         }
         
@@ -229,11 +254,13 @@ public class SignUpController {
                     throw new Exception("Adress format not valid");
                 }
                 tfAdress.setStyle("-fx-border-color:green");
+                errorLabelStreet.setText("");
             } 
         }
         catch(Exception e){
             tfAdress.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-            errorLabel.setText(e.getMessage());
+            errorLabelStreet.setText(e.getMessage());
+            errorLabelStreet.setStyle("-fx-text-fill: red");
             LOGGER.info(e.getMessage());
         }
         
@@ -241,26 +268,118 @@ public class SignUpController {
         
     }
     private void handleZIPFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
-        if(oldValue){
-            
+        try{
+           if(oldValue){
+           String text = tfZip.getText();
+           boolean valid = text.matches("[0-9]+");
+           if(text.isEmpty()){
+               throw new Exception("ZIP field is empty");
+           }
+           if(text.length()>5 || text.length()<5){
+               throw new Exception("ZIP length not valid (5 numbers)");
+           }
+           if(!valid){
+               throw new Exception("ZIP format not valid");
+           }
+           tfZip.setStyle("-fx-border-color:green");
+           errorLabelState.setText("");
+        } 
         }
+        catch(Exception e){
+            tfZip.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            errorLabelState.setText(e.getMessage());
+            errorLabelState.setStyle("-fx-text-fill: red");
+            LOGGER.info(e.getMessage());
+        }
+        
         
     }
     private void handlePhoneFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
-        if(oldValue){
-            
+        try{
+            if(oldValue){
+                String text = tfPhone.getText();
+                boolean valid = text.matches("[0-9 +]+");
+                if(!text.contains("+1")){
+                    throw new Exception("Phone number must be +1");
+                }
+                if(!valid){
+                    throw new Exception("Phone format invalid");
+                }
+                if(text.length()>15){
+                    throw new Exception("Phone number too long");
+                }
+                if(text.isEmpty()){
+                    throw new Exception("Phone number is empty");
+                }
+                tfPhone.setStyle("-fx-border-color:green");
+                errorLabelPhone.setText("");
+            }
         }
+        catch(Exception e){
+            tfPhone.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            errorLabelPhone.setText(e.getMessage());
+            errorLabelPhone.setStyle("-fx-text-fill: red");
+            LOGGER.info(e.getMessage());
+        }
+        
         
     }
     private void handleEmailFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
-        if(oldValue){
-            
-        }   
+        try{
+            if(oldValue){
+                String text = tfEmail.getText();
+                String patronEmail = "^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
+                if(text.isEmpty()){
+                    throw new Exception("Email is empty");
+                }
+                if(text.length()>100){
+                    throw new Exception("Email too long");
+                }
+                if(!text.matches(patronEmail)){
+                    throw new Exception("Email format not valid");
+                }
+                tfEmail.setStyle("-fx-border-color:green");
+                errorLabelEmail.setText("");
+        }
+        }
+        catch(Exception e){
+            tfEmail.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            errorLabelEmail.setText(e.getMessage());
+            errorLabelEmail.setStyle("-fx-text-fill: red");
+            LOGGER.info(e.getMessage());
+        }
+           
     }
     private void handlePasswFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
-        if(oldValue){
-            
-        }  
+        try{
+            if(oldValue){
+                String text = pfPassw.getText();
+                if(text.isEmpty()){
+                    throw new Exception("Password is empty");
+                }
+                if(text.length()<5){
+                    throw new Exception("Password too short");
+                }
+                if(text.length()>30){
+                    throw new Exception("Password too long");
+                }
+                if(text.contains("[A-Z]+")){
+                    throw new Exception("Password must contain Upper Case");
+                }
+                if(text.contains("[0-9]+")){
+                    throw new Exception("Password must contain numbers");
+                }
+                pfPassw.setStyle("-fx-border-color:green");
+                errorLabelPassw.setText("");
+        } 
+        }
+        catch(Exception e){
+            pfPassw.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            errorLabelPassw.setText(e.getMessage());
+            errorLabelPassw.setStyle("-fx-text-fill: red");
+            LOGGER.info(e.getMessage());
+        }
+         
     }
     private void handleConfirmPasswFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
         if(oldValue){
