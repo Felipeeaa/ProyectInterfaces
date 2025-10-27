@@ -6,7 +6,7 @@
 package projectinterfaces.ui;
 
 import java.util.logging.Logger;
-import javafx.beans.property.StringProperty;
+
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -49,9 +49,9 @@ public class ChangePasswordController {
         changePass.setOnAction(this::handleChangePassOnAction);
         exit.setOnAction(this::handleExitOnAction);
         //Asiciacion de manejadores a properties
-        oldPass.textProperty().addListener(this::handleOldPasstextChange);
-        newPass.textProperty().addListener(this::handleNewPasstextChange);
-        confirmNewPass.textProperty().addListener(this::handleConfirmNewPasstextChange);
+        oldPass.focusedProperty().addListener(this::handleOldPassChange);
+        newPass.focusedProperty().addListener(this::handleNewPasstextChange);
+        confirmNewPass.focusedProperty().addListener(this::handleConfirmNewPasstextChange);
         
         stage.show();
         
@@ -63,7 +63,7 @@ public class ChangePasswordController {
      * @param oldValue
      * @param newValue 
      */
-    private void handleOldPassFocusChange(ObservableValue observable,Boolean oldValue,Boolean newValue){
+    private void handleOldPassChange(ObservableValue observable,Boolean oldValue,Boolean newValue){
         try{
             if(oldValue){
             String text = oldPass.getText();
@@ -79,8 +79,14 @@ public class ChangePasswordController {
      * @param oldValue
      * @param newValue 
      */
-    private void handleNewPasstextChange(ObservableValue observable,String oldValue,String newValue){
-       
+    private void handleNewPasstextChange(ObservableValue observable,Boolean oldValue,Boolean newValue){
+       try{
+            if(oldValue){
+            String text = oldPass.getText();
+        }
+        }catch (Exception e){
+            
+        }
     }
     /**
      * 
@@ -91,11 +97,13 @@ public class ChangePasswordController {
     private void handleNewPassFocusChange(ObservableValue observable,Boolean oldValue,Boolean newValue){
         try{
             if(oldValue){
-                String text = oldPass.getText();
-                boolean valid = text.matches("!-~");
-                if(text.isEmpty())
+                String pass = newPass.getText();
+                boolean valid = pass.matches("!-~");
+                if(oldPass.getText().equals(newPass.getText()))
+                    throw new Exception ("The password is the same as the previous one");  
+                if(pass.isEmpty())
                     throw new Exception ("Old Password is empty");
-                if(text.length()<5)
+                if(pass.length()<5)
                     throw new Exception ("The password is too short");
                 if(!valid)
                     throw new Exception ("The password format is not valid");
@@ -115,8 +123,7 @@ public class ChangePasswordController {
     private void handleConfirmNewPasstextChange(ObservableValue observable,Boolean oldValue,Boolean newValue){
        try{
             if(oldValue){
-                String pass = oldPass.getText();
-                if(pass.length()<5){
+                if(!newPass.getText().equals(confirmNewPass.getText())){
                     throw new Exception ("The password is not the same");  
                 }
             }
@@ -132,8 +139,18 @@ public class ChangePasswordController {
      * @param newValue 
      */
     private void handleConfirmNewPassFocusChange(ObservableValue observable,Boolean oldValue,Boolean newValue){
-        if(oldValue){
-            
+        try{
+            if(oldValue){
+                boolean oldPassValid = !oldPass.getText().trim().isEmpty();
+                boolean newPassValid = !newPass.getText().trim().isEmpty();
+                boolean confirmNewPassValid = !confirmNewPass.getText().trim().isEmpty();
+
+                // El botón solo se habilita si todos los campos tienen texto
+                boolean camposCompletos = oldPassValid && newPassValid && confirmNewPassValid;
+                changePass.setDisable(!camposCompletos);
+            }
+        }catch (Exception e){
+            errorLabel.setText(e.getMessage());
         }
     }
     //Botones
@@ -142,7 +159,18 @@ public class ChangePasswordController {
      * @param event 
      */
     private void handleChangePassOnAction(ActionEvent event){
-       
+       try{
+            boolean oldPassValid = !oldPass.getText().trim().isEmpty();
+            boolean newPassValid = !newPass.getText().trim().isEmpty();
+            boolean confirmNewPassValid = !confirmNewPass.getText().trim().isEmpty();
+
+            // El botón solo se habilita si todos los campos tienen texto
+            boolean camposCompletos = oldPassValid && newPassValid && confirmNewPassValid;
+            changePass.setDisable(!camposCompletos);
+            
+        }catch (Exception e){
+            errorLabel.setText(e.getMessage());
+        }
     }
     /**
      * 
@@ -150,17 +178,5 @@ public class ChangePasswordController {
      */
     private void handleExitOnAction(ActionEvent event){
         
-    }
-    
-    private void verificarCampos() {
-        boolean oldPassValid = !oldPass.getText().trim().isEmpty();
-        boolean newPassValid = !newPass.getText().trim().isEmpty();
-        boolean confirmNewPassValid = !confirmNewPass.getText().trim().isEmpty();
-
-        // El botón solo se habilita si todos los campos tienen texto
-        boolean camposCompletos = oldPass && newPass && confirmNewPass;
-        changePass.setDisable(!camposCompletos);
-    }
-    
-      
+    }     
 }
