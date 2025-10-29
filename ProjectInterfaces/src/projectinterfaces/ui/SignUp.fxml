@@ -70,5 +70,6 @@
       <Label fx:id="errorLabelEmail" layoutX="691.0" layoutY="484.0" prefHeight="15.0" prefWidth="225.0" text="" />
       <Label fx:id="errorLabelPhone" layoutX="691.0" layoutY="531.0" prefHeight="15.0" prefWidth="225.0" text="" />
       <Label fx:id="errorLabelPassw" layoutX="691.0" layoutY="577.0" prefHeight="15.0" prefWidth="225.0" text="" />
+      <Label fx:id="errorLabelConfPassw" layoutX="691.0" layoutY="621.0" prefHeight="15.0" prefWidth="225.0" text="" />
    </children>
 </Pane>

@@ -18,6 +18,8 @@ import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import java.lang.Exception;
 import javafx.scene.control.Label;
+import projectinterfaces.logic.CustomerRESTClient;
+import projectinterfaces.model.Customer;
 /**
  *
  * @author david
@@ -66,7 +68,20 @@ public class SignUpController {
     private Label errorLabelPhone;
     @FXML
     private Label errorLabelPassw;
+    @FXML
+    private Label errorLabelConfPassw;
     private static final Logger LOGGER=Logger.getLogger("projectinterfaces.ui");
+    boolean fieldNameValid = false;
+    boolean fieldSurNameValid = false;
+    boolean fieldMIValid = false;
+    boolean fieldStateValid = false;
+    boolean fieldCityValid = false;
+    boolean fieldAdressValid = false;
+    boolean fieldZIPValid = false;
+    boolean fieldPhoneValid = false;
+    boolean fieldEmailValid = false;
+    boolean fieldPasswValid = false;
+    boolean fieldConfPasswValid = false;
 
     public void init(Stage stage, Parent root) {
         
@@ -91,8 +106,8 @@ public class SignUpController {
         tfZip.focusedProperty().addListener(this::handleZIPFocusChange);
         tfPhone.focusedProperty().addListener(this::handlePhoneFocusChange);
         tfEmail.focusedProperty().addListener(this::handleEmailFocusChange);
-        pfPassw.focusedProperty().addListener(this::handleNameFocusChange);
-        pfConfPassw.focusedProperty().addListener(this::handleNameFocusChange);
+        pfPassw.focusedProperty().addListener(this::handlePasswFocusChange);
+        pfConfPassw.focusedProperty().addListener(this::handleConfirmPasswFocusChange);
         
                 
         stage.show();
@@ -100,7 +115,13 @@ public class SignUpController {
     }
     
     private void handleBtRegistrarOnAction(ActionEvent event){
-        
+        //try
+        {
+            Customer customer = new Customer();
+            CustomerRESTClient client = new CustomerRESTClient();
+            client.create_XML(customer);
+            client.close();
+        }
     }
     
     private void handleNameFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
@@ -120,12 +141,16 @@ public class SignUpController {
                 }
                 tfName.setStyle("-fx-border-color:green");
                 errorLabelName.setText("");
+                fieldNameValid= true;
+                validateAllFields();
             }
+        
         }
         catch (Exception e){
             tfName.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             errorLabelName.setText(e.getMessage());
             errorLabelName.setStyle("-fx-text-fill: red");
+            bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
         }
     }
@@ -147,12 +172,15 @@ public class SignUpController {
                 }
                 tfSurName.setStyle("-fx-border-color:green"); 
                 errorLabelSurName.setText("");
+                fieldSurNameValid=true;
+                validateAllFields();
             }
         }
         catch (Exception e){
             tfSurName.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             errorLabelSurName.setText(e.getMessage());
             errorLabelSurName.setStyle("-fx-text-fill: red");
+            bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
         }
     }
@@ -172,6 +200,8 @@ public class SignUpController {
                 }
             tfMidInit.setStyle("-fx-border-color:green");
             errorLabelName.setText("");
+            fieldMIValid= true;
+            validateAllFields();
             }
              
         }
@@ -179,6 +209,7 @@ public class SignUpController {
             tfMidInit.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             errorLabelName.setText(e.getMessage());
             errorLabelName.setStyle("-fx-text-fill: red");
+            bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
         }
         
@@ -201,12 +232,15 @@ public class SignUpController {
                 }
                 tfState.setStyle("-fx-border-color:green");
                 errorLabelState.setText("");
+                fieldStateValid= true;
+                validateAllFields();
             }
         }
         catch(Exception e){
             tfState.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             errorLabelState.setText(e.getMessage());
             errorLabelState.setStyle("-fx-text-fill: red");
+            bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
         }
         
@@ -228,12 +262,15 @@ public class SignUpController {
                 }
                 tfCity.setStyle("-fx-border-color:green");
                 errorLabelCity.setText("");
+                fieldCityValid=true;
+                validateAllFields();
             }
         }
         catch(Exception e){
             tfCity.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             errorLabelCity.setText(e.getMessage());
             errorLabelCity.setStyle("-fx-text-fill: red");
+            bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
         }
         
@@ -255,12 +292,15 @@ public class SignUpController {
                 }
                 tfAdress.setStyle("-fx-border-color:green");
                 errorLabelStreet.setText("");
+                fieldAdressValid=true;
+                validateAllFields();
             } 
         }
         catch(Exception e){
             tfAdress.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             errorLabelStreet.setText(e.getMessage());
             errorLabelStreet.setStyle("-fx-text-fill: red");
+            bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
         }
         
@@ -283,12 +323,15 @@ public class SignUpController {
            }
            tfZip.setStyle("-fx-border-color:green");
            errorLabelState.setText("");
+           fieldZIPValid=true;
+           validateAllFields();
         } 
         }
         catch(Exception e){
             tfZip.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             errorLabelState.setText(e.getMessage());
             errorLabelState.setStyle("-fx-text-fill: red");
+            bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
         }
         
@@ -313,12 +356,15 @@ public class SignUpController {
                 }
                 tfPhone.setStyle("-fx-border-color:green");
                 errorLabelPhone.setText("");
+                fieldPhoneValid=true;
+                validateAllFields();
             }
         }
         catch(Exception e){
             tfPhone.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             errorLabelPhone.setText(e.getMessage());
             errorLabelPhone.setStyle("-fx-text-fill: red");
+            bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
         }
         
@@ -340,12 +386,15 @@ public class SignUpController {
                 }
                 tfEmail.setStyle("-fx-border-color:green");
                 errorLabelEmail.setText("");
+                fieldEmailValid=true;
+                validateAllFields();
         }
         }
         catch(Exception e){
             tfEmail.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             errorLabelEmail.setText(e.getMessage());
             errorLabelEmail.setStyle("-fx-text-fill: red");
+            bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
         }
            
@@ -354,36 +403,61 @@ public class SignUpController {
         try{
             if(oldValue){
                 String text = pfPassw.getText();
+                String passwReq = "^(?=.*[A-Z])(?=.*\\d).{6,29}$";
                 if(text.isEmpty()){
                     throw new Exception("Password is empty");
                 }
-                if(text.length()<5){
-                    throw new Exception("Password too short");
-                }
-                if(text.length()>30){
-                    throw new Exception("Password too long");
-                }
-                if(text.contains("[A-Z]+")){
-                    throw new Exception("Password must contain Upper Case");
-                }
-                if(text.contains("[0-9]+")){
-                    throw new Exception("Password must contain numbers");
+                if(!text.matches(passwReq)){
+                    throw new Exception("Password introduced not valid");
                 }
                 pfPassw.setStyle("-fx-border-color:green");
                 errorLabelPassw.setText("");
-        } 
+                fieldPasswValid=true;
+                validateAllFields();
+            } 
         }
         catch(Exception e){
             pfPassw.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             errorLabelPassw.setText(e.getMessage());
             errorLabelPassw.setStyle("-fx-text-fill: red");
+            bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
         }
          
     }
     private void handleConfirmPasswFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
-        if(oldValue){
-            
-        }   
-    }   
+      try{
+            if(oldValue){
+                String text = pfConfPassw.getText();
+                String passwReq = "^(?=.*[A-Z])(?=.*\\d).{6,29}$";
+                if(text.isEmpty()){
+                    throw new Exception("Password is empty");
+                }
+                if(!text.matches(passwReq)){
+                    throw new Exception("Password introduced not valid");
+                }
+                if(!text.equals(pfPassw.getText())){
+                    throw new Exception("The password entered does not match ");
+                }
+                pfConfPassw.setStyle("-fx-border-color:green");
+                errorLabelConfPassw.setText("");
+                fieldConfPasswValid = true;
+                validateAllFields();
+            } 
+        }
+        catch(Exception e){
+            pfConfPassw.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            errorLabelConfPassw.setText(e.getMessage());
+            errorLabelConfPassw.setStyle("-fx-text-fill: red");
+            bbutton.setDisable(true);
+            LOGGER.info(e.getMessage());
+        }  
+          
+    } 
+    
+    private void validateAllFields(){
+        if(fieldNameValid&&fieldSurNameValid&&fieldMIValid&&fieldStateValid&&fieldCityValid&&fieldAdressValid&&fieldZIPValid&&fieldPhoneValid&&fieldEmailValid&&fieldPasswValid&&fieldConfPasswValid){
+            bbutton.setDisable(false);
+        }
+    }
 }
