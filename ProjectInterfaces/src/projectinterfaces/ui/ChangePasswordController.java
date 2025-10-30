@@ -160,7 +160,8 @@ public class ChangePasswordController {
             btChangePass.setDisable(!camposCompletos);
             //customer.setPassword(tfConfirmNewPass.getText());
             //new Alert(AlertType.INFORMATION,"User password succesfully change!!").showAndWait();
-            
+            customer.getEmail();
+            Customer.setPassword(tfConfirmNewPass.getText());
         }catch (Exception e){
             lbConfirmErrorLabel.setText(e.getMessage());
            // LOGGER.warning(e.getLocalisedMessage());
