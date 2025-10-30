@@ -109,11 +109,13 @@ public class ProjectInterfacesController {
             alert.setContentText("Welcom");
             alert.showAndWait();
 
-            //throw new InternalServerErrorException("Internal server error, please wait or contanct your service providrer");
+            
         } catch (NotAuthorizedException a) {
             handleAlert(a.getMessage());
         } catch (InternalServerErrorException b) {
-            handleAlert(b.getMessage());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("Server internal not found, please");
+            alert.showAndWait();
         } catch (Exception e) {
             handleAlert(e.getMessage());
 
