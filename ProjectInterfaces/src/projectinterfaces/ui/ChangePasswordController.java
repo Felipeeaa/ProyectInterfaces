@@ -80,8 +80,11 @@ public class ChangePasswordController {
                     btChangePass.setDisable(true);
                     throw new Exception ("Old Password is empty");
                 }
+                if(!pass.equals(customer.getPassword()));
+                    throw new Exception("Incorrect password");
             }
         }catch (Exception e){
+            tfNewPass.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             lbOldErrorLabel.setText(e.getMessage());
         }
     }
@@ -111,7 +114,7 @@ public class ChangePasswordController {
                 lbNewErrorLabel.setText("");
         }
         }catch (Exception e){
-            tfOldPass.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            tfNewPass.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             lbNewErrorLabel.setText(e.getMessage());
         }
     }
