@@ -5,7 +5,7 @@
  */
 package projectinterfaces.ui;
 
-
+import projectinterfaces.model.Customer;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,12 +20,16 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotAuthorizedException;
+import projectinterfaces.logic.CustomerRESTClient1;
 
 /**
  *
  * @author Luis Felipe Acosta Osorno
  */
 public class ProjectInterfacesController {
+
     @FXML
     private TextField tfEmail;
     @FXML
@@ -36,10 +40,10 @@ public class ProjectInterfacesController {
     private Button btnLogin;
     @FXML
     private Button btnExit;
-    private static final Logger LOGGER=Logger.getLogger("projectinterfaces.ui");
+    private static final Logger LOGGER = Logger.getLogger("projectinterfaces.ui");
 
     public void init(Stage stage, Parent root) {
-        
+
         //Se crea la escena asociada al grafico de root.
         LOGGER.info("Initializing window");
         //Asociamos la escena a la primera ventana.
@@ -61,98 +65,113 @@ public class ProjectInterfacesController {
                 observable, oldValue, newValue) -> handleChecks());
         pfPassword.textProperty().addListener((
                 observable, oldValue, newValue) -> handleChecks());
-        
-        
 
-        
         //Mostrar la ventana
-        
         stage.show();
     }
-    private void handleAlert(String mensaje){
-        Alert alert = new Alert(AlertType.INFORMATION, mensaje, ButtonType.OK);
+
+    private void handleAlert(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(mensaje);
         alert.showAndWait();
     }
-    private void handleRegisterOnAction(){
-        try{ 
-        FXMLLoader loader = new FXMLLoader(
-        getClass().getResource("SignUp.fxml"));
-        Parent root = (Parent)loader.load();
-        Scene scene = new Scene(root);
-        scene.getRoot();
-        
-        throw new Exception("Error, al ir al registro");
-        
-        }catch(Exception e){
-           handleAlert(e.getMessage());
+
+    private void handleRegisterOnAction() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("SignUp.fxml"));
+            Parent root = (Parent) loader.load();
+            Scene scene = new Scene(root);
+            scene.getRoot();
+
+            throw new Exception("Error, al ir al registro");
+
+        } catch (Exception e) {
+            handleAlert(e.getMessage());
         }
     }
-    private void handleLoginOnAction(ActionEvent event){
-         try{
-             //Comprobación de los campos
-            if(this.tfEmail.getText().trim().equals("") || 
-                    this.pfPassword.getText().trim().equals("")){
-            throw new Exception("The email or password is incorrect");
+
+    private void handleLoginOnAction(ActionEvent event) {
+        try {
+            //Comprobación de los campos
+            if (this.tfEmail.getText().trim().equals("")
+                    || this.pfPassword.getText().trim().equals("")) {
+            throw new NotAuthorizedException("The email or password is incorrect");
             }
-            if(tfEmail.getText().equals("") || pfPassword.getText().equals("")){
-                throw new Exception("you need to fill in email or password");
-            }
-            //Crear un objeto customer
-            /*Customer customer = new Customer();
-            CustomerRESTClient cliente = new CustomerRESTClient().findCustomerByEmailPassword_XML();
-            cliente.close();*/
             
-        }catch (Exception e){
-         handleAlert(e.getMessage());
-         
-         }
+            //Crear un objeto customer
+            CustomerRESTClient1 customer = new CustomerRESTClient1();
+
+            customer.findCustomerByEmailPassword_XML(Customer.class,
+                    tfEmail.getText().trim(), pfPassword.getText().trim());
+            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("Welcom");
+            alert.showAndWait();
+
+            //throw new InternalServerErrorException("Internal server error, please wait or contanct your service providrer");
+        } catch (NotAuthorizedException a) {
+            handleAlert(a.getMessage());
+        } catch (InternalServerErrorException b) {
+            handleAlert(b.getMessage());
+        } catch (Exception e) {
+            handleAlert(e.getMessage());
+
         }
-    
+    }
+
     /**
-     * 
+     *
      * @param event utilizamos este evento para manejar las excepciones
      * necesarias a la hora de pulsar el boton Login
      */
-    private void handleChecks(){
+    
+    private void handleChecks() {
         boolean fEmail = fEmail();
         boolean fPassword = fPassword();
         btnLogin.setDisable(!(fEmail && fPassword));
-            }
-
+    }
+    /**
+     * 
+     * @return 
+     */
     private boolean fEmail() {
         boolean isfEmail = tfEmail.getText().isEmpty();
         return !isfEmail;
     }
+    /**
+     * 
+     * @return devuelve el email
+     */
 
     private boolean fPassword() {
         boolean isfPassword = pfPassword.getText().isEmpty();
         return !isfPassword;
     }
-    
     /**
      * 
-     * @param event 
+     * @return devuelve la contraseña
      */
-    private void handleExitOnAction(ActionEvent event){
-        
-     Alert alert = new Alert(AlertType.CONFIRMATION, 
-             "Are you sure you want to go out?",
-              ButtonType.YES, ButtonType.NO);
-     alert.setTitle("Confirm Exit");
-     alert.showAndWait();
-     
-     if(alert.getResult() == ButtonType.YES){
-         //Lanzamos la ventana emergente para pedir confirmación de salida
-         Stage stage = (Stage) btnExit.getScene().getWindow();
+
+    private void handleExitOnAction(ActionEvent event) {
+
+        Alert alert = new Alert(AlertType.CONFIRMATION,
+                "Are you sure you want to go out?",
+                ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Confirm Exit");
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.YES) {
+            //Lanzamos la ventana emergente para pedir confirmación de salida
+            Stage stage = (Stage) btnExit.getScene().getWindow();
             stage.close();
-     }
-     
+        }
+
     }
     /**
-     * 
+     *
      * @param event utilizamos este evento para controlar la salida del usuario
      * antes de salir se le manda un mensaje para que confirme la salida
      */
-    
-}
 
+}

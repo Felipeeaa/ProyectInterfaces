@@ -25,7 +25,9 @@ public class ProjectInterfacesApplication extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/ProyectoSignIn.fxml"));
         Parent root = (Parent)loader.load();
         ProjectInterfacesController controller = loader.getController();
+        
         controller.init(stage, root);
+       
         
         
         
