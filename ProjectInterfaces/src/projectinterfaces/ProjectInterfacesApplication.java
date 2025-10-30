@@ -17,16 +17,16 @@ import projectinterfaces.ui.ChangePasswordController;
  * @author miguel
  */
 public class ProjectInterfacesApplication extends Application {
-    
+              
     @Override
     public void start(Stage stage) throws Exception {
         
+        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/ChangePassword.fxml"));
         Parent root = (Parent)loader.load();
-        
         ChangePasswordController controller = loader.getController();
-        
-        controller.init(stage,root);
+        //setCustomer(customer.getEmail(),customer.getPassword());
+        controller.init(stage, root);
         
         Scene scene = new Scene(root);
         
