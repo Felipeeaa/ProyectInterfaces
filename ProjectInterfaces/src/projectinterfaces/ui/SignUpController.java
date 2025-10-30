@@ -17,7 +17,11 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import java.lang.Exception;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.InternalServerErrorException;
 import projectinterfaces.logic.CustomerRESTClient;
 import projectinterfaces.model.Customer;
 /**
@@ -70,7 +74,9 @@ public class SignUpController {
     private Label errorLabelPassw;
     @FXML
     private Label errorLabelConfPassw;
+    //Logger for notifying errors
     private static final Logger LOGGER=Logger.getLogger("projectinterfaces.ui");
+    //Variables used for validating the textField
     boolean fieldNameValid = false;
     boolean fieldSurNameValid = false;
     boolean fieldMIValid = false;
@@ -85,7 +91,10 @@ public class SignUpController {
 
     public void init(Stage stage, Parent root) {
         
+        //Logger saying the window has been initialized
         LOGGER.info("Initializing window");
+        
+        //Initializing the window
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Sign Up");
@@ -93,10 +102,10 @@ public class SignUpController {
         bbutton.setDisable(true);
         
         
-        
+        //On click button handler
         bbutton.setOnAction(this::handleBtRegistrarOnAction);
         
-        
+        //All the change focus handlers for textFields
         tfName.focusedProperty().addListener(this::handleNameFocusChange);
         tfSurName.focusedProperty().addListener(this::handleSurNameFocusChange);
         tfMidInit.focusedProperty().addListener(this::handleMIFocusChange);
@@ -107,38 +116,119 @@ public class SignUpController {
         tfPhone.focusedProperty().addListener(this::handlePhoneFocusChange);
         tfEmail.focusedProperty().addListener(this::handleEmailFocusChange);
         pfPassw.focusedProperty().addListener(this::handlePasswFocusChange);
-        pfConfPassw.focusedProperty().addListener(this::handleConfirmPasswFocusChange);
+        pfConfPassw.textProperty().addListener(this::handleConfirmPasswTextChange);
         
                 
         stage.show();
         
     }
-    
+    /**
+     * Handler for the register button 
+     * @param onclick 
+     */
     private void handleBtRegistrarOnAction(ActionEvent event){
-        //try
-        {
+        try{
+            //Validation for textfield name
+            if(tfName.getText().isEmpty() || tfName.getText().length()>30 || !tfName.getText().matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")){
+                throw new Exception("Name field not valid");
+            }
+            //Validation for textField surname
+            if(tfSurName.getText().isEmpty() || tfSurName.getText().length()>30 || !tfSurName.getText().matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")){
+                throw new Exception("Surname field not valid");
+            }
+            //Validation for textField middle initial
+            if(tfMidInit.getText().isEmpty() || tfMidInit.getText().length()>1 || !tfMidInit.getText().matches("[A-Z]+")){
+                throw new Exception("Middle initial field not valid");
+            }
+            //Validation for textField State
+            if(tfState.getText().isEmpty() || tfState.getText().length()>30 || !tfState.getText().matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")){
+                throw new Exception("State field not valid");
+            }
+            //Validation for textfield city
+            if(tfCity.getText().isEmpty() || tfCity.getText().length()>30 || !tfCity.getText().matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")){
+                throw new Exception("City field not valid");
+            }
+            //Validation for textfield adress
+            if(tfAdress.getText().isEmpty() || tfAdress.getText().length()>30 || !tfAdress.getText().matches("[0-9a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")){
+                throw new Exception("City field not valid");
+            }
+            //Validation for textfield zip
+            if(tfZip.getText().isEmpty() || tfZip.getText().length()>5 || tfZip.getText().length()<5 || !tfZip.getText().matches("[0-9]+")){
+                throw new Exception("Zip field not valid");
+            }
+            //Validation for textfield phone
+            if(!tfPhone.getText().matches("[0-9 +]+") || tfPhone.getText().length()>15 || tfPhone.getText().isEmpty()){
+                throw new Exception("Phone field not valid");
+            }
+            //Validation for textfield email
+            if(!tfEmail.getText().matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$") || tfEmail.getText().isEmpty() || tfEmail.getText().length()>100){
+                throw new Exception("Email field not valid");
+            }
+            //Validation for passwordfield password
+            if(pfPassw.getText().isEmpty() || !pfPassw.getText().matches("^(?=.*[A-Z])(?=.*\\d).{5,30}$")){
+                throw new Exception("Password field not valid");
+            }
+            //Validation for passwordfield confirm password
+            if(pfConfPassw.getText().isEmpty() || !pfConfPassw.getText().matches("^(?=.*[A-Z])(?=.*\\d).{5,30}$") || !pfConfPassw.getText().equals(pfPassw.getText())){
+                throw new Exception("Password field not valid");
+            }
+            //Setting all the values to the object customer
             Customer customer = new Customer();
+            customer.setFirstName(tfName.getText());
+            customer.setLastName(tfSurName.getText());
+            customer.setMiddleInitial(tfMidInit.getText()+".");
+            customer.setState(tfState.getText());
+            customer.setCity(tfCity.getText());
+            customer.setStreet(tfAdress.getText());
+            customer.setZip(Integer.parseInt(tfZip.getText()));
+            customer.setPhone(Long.parseLong(tfPhone.getText()));
+            customer.setEmail(tfEmail.getText());
+            customer.setPassword(pfConfPassw.getText());
+            //adding the customer to the database
             CustomerRESTClient client = new CustomerRESTClient();
             client.create_XML(customer);
             client.close();
+            //Alert showing it went through
+            new Alert(AlertType.INFORMATION,"Succesfully registered!").showAndWait();
+        }
+        //Catch server error 500
+        catch(InternalServerErrorException e){
+            new Alert(AlertType.INFORMATION,"Internal server error, please wait or contact your service provider").showAndWait();
+        }
+        //Catch same email being used
+        catch(ForbiddenException e){
+            new Alert(AlertType.INFORMATION,"Introduced Email already exist, use another").showAndWait();
+        }
+        //Catch any error on validation
+        catch(Exception e){
+            new Alert(AlertType.INFORMATION,e.getMessage()).showAndWait();
         }
     }
-    
+    /**
+     * Method for validating the textField name
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
     private void handleNameFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
         try{
         if(oldValue){
             
                 String text = tfName.getText();
                 boolean valid = text.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+                //Checks if its empty
                 if(text.isEmpty()){
                     throw new Exception ("Name field empty");
                 }
+                //Checks the length of the text introduced
                 if(text.length()>30){
                     throw new Exception("Name text too long");
                 }
+                //Check if it has invalid characters
                 if (!valid){
                     throw new Exception("Name format not valid");
                 }
+                //Validates the field
                 tfName.setStyle("-fx-border-color:green");
                 errorLabelName.setText("");
                 fieldNameValid= true;
@@ -146,6 +236,7 @@ public class SignUpController {
             }
         
         }
+        //Catches the error and writes it in a label
         catch (Exception e){
             tfName.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             errorLabelName.setText(e.getMessage());
@@ -155,18 +246,26 @@ public class SignUpController {
         }
     }
     
-    
+    /**
+     * Method for validating the textfield surname
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
     private void handleSurNameFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
         try{
             if(oldValue){
                 String text = tfSurName.getText();
                 boolean valid = text.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+                //Validates that is empty
                 if(text.isEmpty()){
                     throw new Exception ("Surname field empty");
                 }
+                //Validates the length of the text
                 if(text.length()>30){
                     throw new Exception("Surname text too long");
                 }
+                //validates if it has the correct format
                 if (!valid){
                     throw new Exception("Surname format not valid");
                 }
@@ -184,17 +283,27 @@ public class SignUpController {
             LOGGER.info(e.getMessage());
         }
     }
+    
+    /**
+     * Method for validating textField middle initial
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
     private void handleMIFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
         try{
            if(oldValue){
             String text= tfMidInit.getText();
             boolean valid = text.matches("[A-Z]+");
+            //Validates that is no longer than 1 letter
             if(text.length()>1){
                 throw new Exception("Input just one initial");
                 }
+            //Validates that is empty
             if(text.isEmpty()){
                 throw new Exception("Middle initial field is empty");
                 }
+            //Validates that it has the right format
             if(!valid){
                 throw new Exception("Middle initial format invalid");
                 }
@@ -216,6 +325,13 @@ public class SignUpController {
         
         
     }
+    
+    /**
+     * Method for validating textField State
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
     private void handleStateFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
         try{
             if(oldValue){
@@ -246,6 +362,13 @@ public class SignUpController {
         
         
     }
+    
+    /**
+     * Method for validating textField City
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
     private void handleCityFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
         try{
             if(oldValue){
@@ -276,6 +399,13 @@ public class SignUpController {
         
         
     }
+    
+    /**
+     * Method for validating textField Adress
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
     private void handleAdressFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
         try{
         if(oldValue){
@@ -303,10 +433,14 @@ public class SignUpController {
             bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
         }
-        
-        
-        
     }
+    
+    /**
+     * Method for validating textField ZIP
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
     private void handleZIPFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
         try{
            if(oldValue){
@@ -333,18 +467,20 @@ public class SignUpController {
             errorLabelState.setStyle("-fx-text-fill: red");
             bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
-        }
-        
-        
+        } 
     }
+    
+    /**
+     * Method for validating textField Phone
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
     private void handlePhoneFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
         try{
             if(oldValue){
                 String text = tfPhone.getText();
                 boolean valid = text.matches("[0-9 +]+");
-                if(!text.contains("+1")){
-                    throw new Exception("Phone number must be +1");
-                }
                 if(!valid){
                     throw new Exception("Phone format invalid");
                 }
@@ -366,10 +502,14 @@ public class SignUpController {
             errorLabelPhone.setStyle("-fx-text-fill: red");
             bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
-        }
-        
-        
+        }  
     }
+    /**
+     * Method for validating textField Email
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
     private void handleEmailFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
         try{
             if(oldValue){
@@ -399,11 +539,18 @@ public class SignUpController {
         }
            
     }
+    
+    /**
+     * Method for validating passwordField Password
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
     private void handlePasswFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
         try{
             if(oldValue){
                 String text = pfPassw.getText();
-                String passwReq = "^(?=.*[A-Z])(?=.*\\d).{6,29}$";
+                String passwReq = "^(?=.*[A-Z])(?=.*\\d).{5,30}$";
                 if(text.isEmpty()){
                     throw new Exception("Password is empty");
                 }
@@ -425,26 +572,33 @@ public class SignUpController {
         }
          
     }
-    private void handleConfirmPasswFocusChange(ObservableValue observable, Boolean oldValue, Boolean newValue){
+    
+    /**
+     * Method for validating passwordField Confirm password
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
+    private void handleConfirmPasswTextChange(ObservableValue observable, Object oldValue, Object newValue){
       try{
-            if(oldValue){
-                String text = pfConfPassw.getText();
-                String passwReq = "^(?=.*[A-Z])(?=.*\\d).{6,29}$";
-                if(text.isEmpty()){
-                    throw new Exception("Password is empty");
-                }
-                if(!text.matches(passwReq)){
-                    throw new Exception("Password introduced not valid");
-                }
-                if(!text.equals(pfPassw.getText())){
-                    throw new Exception("The password entered does not match ");
-                }
-                pfConfPassw.setStyle("-fx-border-color:green");
-                errorLabelConfPassw.setText("");
-                fieldConfPasswValid = true;
-                validateAllFields();
-            } 
+            
+        String text = pfConfPassw.getText();
+        String passwReq = "^(?=.*[A-Z])(?=.*\\d).{6,29}$";
+        if(text.isEmpty()){
+           throw new Exception("Password is empty");
         }
+        if(!text.matches(passwReq)){
+           throw new Exception("Password introduced not valid");
+        }
+        if(!text.equals(pfPassw.getText())){
+           throw new Exception("The password entered does not match ");
+        }
+        pfConfPassw.setStyle("-fx-border-color:green");
+        errorLabelConfPassw.setText("");
+        fieldConfPasswValid = true;
+        validateAllFields();
+        } 
+        
         catch(Exception e){
             pfConfPassw.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             errorLabelConfPassw.setText(e.getMessage());
@@ -455,6 +609,9 @@ public class SignUpController {
           
     } 
     
+    /**
+     * Method for validating that all fields are correct
+     */
     private void validateAllFields(){
         if(fieldNameValid&&fieldSurNameValid&&fieldMIValid&&fieldStateValid&&fieldCityValid&&fieldAdressValid&&fieldZIPValid&&fieldPhoneValid&&fieldEmailValid&&fieldPasswValid&&fieldConfPasswValid){
             bbutton.setDisable(false);
