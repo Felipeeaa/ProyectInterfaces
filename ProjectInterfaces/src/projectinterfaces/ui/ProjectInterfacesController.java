@@ -69,7 +69,11 @@ public class ProjectInterfacesController {
         
         stage.show();
     }
-    /*private void handleRegisterOnAction(){
+    private void handleAlert(String mensaje){
+        Alert alert = new Alert(AlertType.INFORMATION, mensaje, ButtonType.OK);
+        alert.showAndWait();
+    }
+    private void handleRegisterOnAction(){
         try{ 
         FXMLLoader loader = new FXMLLoader(
         getClass().getResource("SignUp.fxml"));
@@ -80,10 +84,9 @@ public class ProjectInterfacesController {
         throw new Exception("Error, al ir al registro");
         
         }catch(Exception e){
-           Alert alert = new Alert(
-                   AlertType.ERROR, e.getMessage(), ButtonType.OK);
+           handleAlert(e.getMessage());
         }
-    }*/
+    }
     private void handleLoginOnAction(ActionEvent event){
          try{
              //Comprobación de los campos
@@ -91,17 +94,17 @@ public class ProjectInterfacesController {
                     this.pfPassword.getText().trim().equals("")){
             throw new Exception("The email or password is incorrect");
             }
+            if(tfEmail.getText().equals("") || pfPassword.getText().equals("")){
+                throw new Exception("you need to fill in email or password");
+            }
+            //Crear un objeto customer
+            /*Customer customer = new Customer();
+            CustomerRESTClient cliente = new CustomerRESTClient().findCustomerByEmailPassword_XML();
+            cliente.close();*/
             
         }catch (Exception e){
-         Alert alert = new Alert(AlertType.ERROR, e.getMessage(),
-                 ButtonType.OK);
-         alert.showAndWait();
-         if(tfEmail.getText().trim().equals("")){
-            tfEmail.setStyle("-fx-text-inner-color: red; -fx-border-width: 2;");
-         }
-         if(pfPassword.getText().trim().equals("")){
-         pfPassword.setStyle("-fx-text-inner-color: red; -fx-border-width: 2;");
-         }
+         handleAlert(e.getMessage());
+         
          }
         }
     
