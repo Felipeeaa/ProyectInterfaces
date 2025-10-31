@@ -41,6 +41,8 @@ public class ProjectInterfacesController {
     @FXML
     private Button btnExit;
     private static final Logger LOGGER = Logger.getLogger("projectinterfaces.ui");
+    private Stage stage;
+    private String password;
 
     public void init(Stage stage, Parent root) {
 
@@ -78,8 +80,9 @@ public class ProjectInterfacesController {
 
     private void handleRegisterOnAction() {
         try {
+           
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("SignUp.fxml"));
+                    getClass().getResource("SignUpController.fxml"));
             Parent root = (Parent) loader.load();
             Scene scene = new Scene(root);
             scene.getRoot();
@@ -87,7 +90,8 @@ public class ProjectInterfacesController {
             throw new Exception("Error, al ir al registro");
 
         } catch (Exception e) {
-            handleAlert(e.getMessage());
+            LOGGER.warning(e.getMessage());
+            handleAlert("Error, al ir al registro");
         }
     }
 
@@ -96,26 +100,39 @@ public class ProjectInterfacesController {
             //Comprobación de los campos
             if (this.tfEmail.getText().trim().equals("")
                     || this.pfPassword.getText().trim().equals("")) {
-            throw new NotAuthorizedException("The email or password is incorrect");
+            throw new Exception("Email and password must be to filled.");
             }
             
             //Crear un objeto customer
-            CustomerRESTClient1 customer = new CustomerRESTClient1();
+            CustomerRESTClient1 client = new CustomerRESTClient1();
 
-            customer.findCustomerByEmailPassword_XML(Customer.class,
+            Customer customer = client.findCustomerByEmailPassword_XML(Customer.class,
                     tfEmail.getText().trim(), pfPassword.getText().trim());
             
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("Welcom");
+            alert.setContentText("¡Welcome "+customer.getFirstName()+"!");
             alert.showAndWait();
+            //Abrir la ventana de change password
+        /*FXMLLoader loader = new FXMLLoader(getClass().getResource("ChangePasswordController.fxml"));
+        Parent root = (Parent)loader.load();
+        ProjectInterfacesController controller = loader.getController();
+        
+        controller.setCustomer(customer);
+        controller.init(stage, root);*/
+          
 
             
         } catch (NotAuthorizedException a) {
-            handleAlert(a.getMessage());
+            LOGGER.warning(a.getMessage());
+            handleAlert("The email or password is incorrect");
+            
+            
         } catch (InternalServerErrorException b) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("Server internal not found, please");
-            alert.showAndWait();
+            LOGGER.warning(b.getMessage());
+            handleAlert("Internal server not found,\n"
+                    + "please try again after a few minutes,\n "
+                    + "if the problem persists, contact you company");
+            
         } catch (Exception e) {
             handleAlert(e.getMessage());
 
