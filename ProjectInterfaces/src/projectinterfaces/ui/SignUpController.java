@@ -5,6 +5,7 @@
  */
 
 package projectinterfaces.ui;
+import java.awt.Desktop.Action;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import java.lang.Exception;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
@@ -104,7 +106,7 @@ public class SignUpController {
         
         //On click button handler
         bbutton.setOnAction(this::handleBtRegistrarOnAction);
-        
+        hlhyperlink.setOnAction(this::handleHyperlinkOnAction);
         //All the change focus handlers for textFields
         tfName.focusedProperty().addListener(this::handleNameFocusChange);
         tfSurName.focusedProperty().addListener(this::handleSurNameFocusChange);
@@ -190,19 +192,25 @@ public class SignUpController {
             client.close();
             //Alert showing it went through
             new Alert(AlertType.INFORMATION,"Succesfully registered!").showAndWait();
+            LOGGER.info("Customer created successfuly");
         }
         //Catch server error 500
         catch(InternalServerErrorException e){
-            new Alert(AlertType.INFORMATION,"Internal server error, please wait or contact your service provider").showAndWait();
+            new Alert(AlertType.INFORMATION,"Internal server error,\n"+"please wait or contact your service provider").showAndWait();
+            LOGGER.warning("Internal server error");
+            
         }
         //Catch same email being used
         catch(ForbiddenException e){
             new Alert(AlertType.INFORMATION,"Introduced Email already exist, use another").showAndWait();
+            LOGGER.info("Email introduced already exists");
         }
         //Catch any error on validation
         catch(Exception e){
             new Alert(AlertType.INFORMATION,e.getMessage()).showAndWait();
+            LOGGER.info(e.getMessage());
         }
+        
     }
     /**
      * Method for validating the textField name
@@ -608,6 +616,18 @@ public class SignUpController {
         }  
           
     } 
+    
+    private void handleHyperlinkOnAction(ActionEvent event){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ProjectInterfacesController.java"));
+            Parent root = (Parent)loader.load();
+            Scene scene = new Scene(root);
+            scene.getRoot();
+        }
+        catch(Exception e){
+            LOGGER.info(e.getMessage());
+        }
+    }
     
     /**
      * Method for validating that all fields are correct
