@@ -25,9 +25,8 @@ public class ProjectInterfacesApplication extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/ChangePassword.fxml"));
         Parent root = (Parent)loader.load();
         ChangePasswordController controller = loader.getController();
-        //setCustomer(customer.getEmail(),customer.getPassword());
         controller.init(stage, root);
-        
+  
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
