@@ -7,6 +7,7 @@ package projectinterfaces.ui;
 
 import projectinterfaces.model.Customer;
 import java.util.logging.Logger;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -60,13 +61,15 @@ public class ProjectInterfacesController {
         btnLogin.setDisable(true);
         btnExit.setDisable(false);
         //Asociar eventos a manejadores
-        //Register.setOnAction(this::handleRegisterOnAction);
+        Register.setOnAction(this::handleRegisterOnAction);
         btnLogin.setOnAction(this::handleLoginOnAction);
         btnExit.setOnAction(this::handleExitOnAction);
         tfEmail.textProperty().addListener((
                 observable, oldValue, newValue) -> handleChecks());
         pfPassword.textProperty().addListener((
                 observable, oldValue, newValue) -> handleChecks());
+        tfEmail.focusedProperty().addListener(this::handletfEmailFocusChange);
+        pfPassword.focusedProperty().addListener(this::handlepfPasswordFocusChange);
 
         //Mostrar la ventana
         stage.show();
@@ -78,7 +81,7 @@ public class ProjectInterfacesController {
         alert.showAndWait();
     }
 
-    private void handleRegisterOnAction() {
+    private void handleRegisterOnAction(ActionEvent event) {
         try {
            
             FXMLLoader loader = new FXMLLoader(
@@ -87,21 +90,18 @@ public class ProjectInterfacesController {
             Scene scene = new Scene(root);
             scene.getRoot();
 
-            throw new Exception("Error, al ir al registro");
-
         } catch (Exception e) {
             LOGGER.warning(e.getMessage());
-            handleAlert("Error, al ir al registro");
+            handleAlert("¡Error, when going to registry!");
         }
     }
 
     private void handleLoginOnAction(ActionEvent event) {
         try {
             //Comprobación de los campos
-            if (this.tfEmail.getText().trim().equals("")
+            /*if (this.tfEmail.getText().trim().equals("")
                     || this.pfPassword.getText().trim().equals("")) {
-            throw new Exception("Email and password must be to filled.");
-            }
+            }*/
             
             //Crear un objeto customer
             CustomerRESTClient1 client = new CustomerRESTClient1();
@@ -112,7 +112,7 @@ public class ProjectInterfacesController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("¡Welcome "+customer.getFirstName()+"!");
             alert.showAndWait();
-            //Abrir la ventana de change password
+        //Abrir la ventana de change password
         /*FXMLLoader loader = new FXMLLoader(getClass().getResource("ChangePasswordController.fxml"));
         Parent root = (Parent)loader.load();
         ProjectInterfacesController controller = loader.getController();
@@ -124,17 +124,21 @@ public class ProjectInterfacesController {
             
         } catch (NotAuthorizedException a) {
             LOGGER.warning(a.getMessage());
-            handleAlert("The email or password is incorrect");
+            handleAlert("¡The email or password is incorrect!");
+            tfEmail.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            pfPassword.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             
             
         } catch (InternalServerErrorException b) {
             LOGGER.warning(b.getMessage());
-            handleAlert("Internal server not found,\n"
+            handleAlert("¡Internal server not found,\n"
                     + "please try again after a few minutes,\n "
-                    + "if the problem persists, contact you company");
+                    + "if the problem persists, contact you company!");
             
         } catch (Exception e) {
-            handleAlert(e.getMessage());
+            LOGGER.warning(e.getMessage());
+            handleAlert("¡Email and password must be to filled!");
+            
 
         }
     }
@@ -177,7 +181,7 @@ public class ProjectInterfacesController {
         Alert alert = new Alert(AlertType.CONFIRMATION,
                 "Are you sure you want to go out?",
                 ButtonType.YES, ButtonType.NO);
-        alert.setTitle("Confirm Exit");
+        alert.setTitle("¡Confirm Exit!");
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.YES) {
@@ -192,5 +196,23 @@ public class ProjectInterfacesController {
      * @param event utilizamos este evento para controlar la salida del usuario
      * antes de salir se le manda un mensaje para que confirme la salida
      */
+    private void handlepfPasswordFocusChange(ObservableValue observable, 
+            boolean oldValue, boolean newValue){
+        
+        if(newValue){
+        pfPassword.setStyle("-fx-border-color: grey; -fx-border-width: 2px;");
+        }
+        
+        
+    }
+    private void handletfEmailFocusChange(ObservableValue observable, 
+            boolean oldValue, boolean newValue){
+        
+            if(newValue){
+            tfEmail.setStyle("-fx-border-color: grey; -fx-border-width: 2px;");
+            }
+
+        
+    }
 
 }
