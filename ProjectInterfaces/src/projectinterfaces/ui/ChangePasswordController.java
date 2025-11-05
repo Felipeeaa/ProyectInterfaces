@@ -45,10 +45,8 @@ public class ChangePasswordController {
     private Label lbConfirmErrorLabel;
     private Customer customer;
     
-            
     
     private static final Logger LOGGER = Logger.getLogger("ProjectInterfacesApplication.ui");
-    
     public void setCustomer(Customer customer){
         this.customer = customer;
     }
@@ -88,11 +86,9 @@ public class ChangePasswordController {
                     throw new Exception ("Old Password is empty");
                 }
                 //if(!pass.equals(customer.getPassword()))
-                 //   throw new Exception("Incorrect password");
-                    
+                  //  throw new Exception("Incorrect password");
                 tfOldPass.setStyle("-fx-border-color: green; -fx-border-width: 1px;");
                 lbOldErrorLabel.setText("");
-             
         }catch (Exception e){
             tfOldPass.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             lbOldErrorLabel.setText(e.getMessage());
@@ -107,7 +103,6 @@ public class ChangePasswordController {
      */
     private void handletfNewPassFocusChange(ObservableValue observable,Object oldValue,Object newValue){
         try{
-            
                 String pass = tfNewPass.getText();
                 String passValid = "^(?=.*[A-Z])(?=.*\\d).{5,30}$";
                 
@@ -124,7 +119,6 @@ public class ChangePasswordController {
                 
                 tfNewPass.setStyle("-fx-border-color: green; -fx-border-width: 1px;");
                 lbNewErrorLabel.setText("");
-        
         }catch (Exception e){
             tfNewPass.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             lbNewErrorLabel.setText(e.getMessage());
@@ -168,14 +162,13 @@ public class ChangePasswordController {
             boolean oldPassValid = !tfOldPass.getText().trim().isEmpty();
             boolean newPassValid = !tfNewPass.getText().trim().isEmpty();
             boolean confirmNewPassValid = !tfConfirmNewPass.getText().trim().isEmpty();
-            // El botón solo se habilita si todos los campos tienen texto
+            //El botón solo se habilita si todos los campos tienen texto
             boolean camposCompletos = oldPassValid && newPassValid && confirmNewPassValid;
             btChangePass.setDisable(!camposCompletos);
             //customer.setPassword(tfConfirmNewPass.getText());
-            //new Alert(AlertType.INFORMATION,"User password succesfully change!!").showAndWait();
-            
+            new Alert(AlertType.INFORMATION,"User password succesfully change!!").showAndWait();
             //Customer.setPassword(tfConfirmNewPass.getText());
-           /* FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/ProjectInterfacesController.fxml"));
+            /*FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/ProjectInterfacesController.fxml"));
             Parent root = (Parent)loader.load();
             ProjectInterfacesController controller = loader.getController();
             controller.init(stage, root);*/
@@ -192,14 +185,15 @@ public class ChangePasswordController {
      */
     private void handlebtExitOnAction(ActionEvent event){
         try{
-            
+            /*FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/ProjectInterfacesController.fxml"));
+            Parent root = (Parent)loader.load();
+            ProjectInterfacesController controller = loader.getController();
+            controller.init(stage, root);*/
         }catch(Exception e){
             new Alert(AlertType.INFORMATION,e.getLocalizedMessage()).showAndWait();
             LOGGER.warning("Error c");
         }
-    
     }
-    
     /*private void handleBtCrearOnAction(ActionEvent event){
         try{
             //crear objeto customer

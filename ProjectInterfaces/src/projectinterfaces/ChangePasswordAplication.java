@@ -16,7 +16,7 @@ import projectinterfaces.ui.ChangePasswordController;
  *
  * @author miguel
  */
-public class ProjectInterfacesApplication extends Application {
+public class ChangePasswordAplication extends Application {
               
     @Override
     public void start(Stage stage) throws Exception {
