@@ -265,7 +265,7 @@ public class SignUpController {
             if(oldValue){
                 String text = tfSurName.getText();
                 boolean valid = text.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
-                //Validates that is empty
+                //Checks if its empty
                 if(text.isEmpty()){
                     throw new Exception ("Surname field empty");
                 }
@@ -307,7 +307,7 @@ public class SignUpController {
             if(text.length()>1){
                 throw new Exception("Input just one initial");
                 }
-            //Validates that is empty
+            //Checks if its empty
             if(text.isEmpty()){
                 throw new Exception("Middle initial field is empty");
                 }
@@ -345,12 +345,15 @@ public class SignUpController {
             if(oldValue){
                 String text = tfState.getText();
                 boolean valid = text.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+                //Checks if its empty
                 if(text.isEmpty()){
                     throw new Exception ("State field empty");
                 }
+                //Validates the length of the text
                 if(text.length()>30){
                     throw new Exception("State text too long");
                 }
+                //Validates that it has the right format
                 if (!valid){
                     throw new Exception("State format not valid");
                 }
@@ -382,12 +385,15 @@ public class SignUpController {
             if(oldValue){
                 String text = tfCity.getText();
                 boolean valid = text.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+                //Checks if its empty
                 if(text.isEmpty()){
                     throw new Exception ("City field empty");
                 }
+                //Validates the length of the text
                 if(text.length()>30){
                     throw new Exception("City text too long");
                 }
+                //Validates that it has the right format
                 if (!valid){
                     throw new Exception("City format not valid");
                 }
@@ -419,19 +425,22 @@ public class SignUpController {
         if(oldValue){
             String text = tfAdress.getText();
             boolean valid = text.matches("[0-9a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+            //Checks if its empty
             if(text.isEmpty()){
                     throw new Exception ("Adress field empty");
                 }
-                if(text.length()>30){
-                    throw new Exception("Adress text too long");
-                }
-                if (!valid){
-                    throw new Exception("Adress format not valid");
-                }
-                tfAdress.setStyle("-fx-border-color:green");
-                errorLabelStreet.setText("");
-                fieldAdressValid=true;
-                validateAllFields();
+            //Validates the length of the text
+            if(text.length()>30){
+                throw new Exception("Adress text too long");
+              }
+            //Validates that it has the right format
+            if (!valid){
+                throw new Exception("Adress format not valid");
+            }
+            tfAdress.setStyle("-fx-border-color:green");
+            errorLabelStreet.setText("");
+            fieldAdressValid=true;
+            validateAllFields();
             } 
         }
         catch(Exception e){
@@ -454,12 +463,15 @@ public class SignUpController {
            if(oldValue){
            String text = tfZip.getText();
            boolean valid = text.matches("[0-9]+");
+           //Checks if its empty
            if(text.isEmpty()){
                throw new Exception("ZIP field is empty");
            }
+           //Validates the length of the text, only 5 characters
            if(text.length()>5 || text.length()<5){
                throw new Exception("ZIP length not valid (5 numbers)");
            }
+           //Validates that it has the right format
            if(!valid){
                throw new Exception("ZIP format not valid");
            }
@@ -489,12 +501,15 @@ public class SignUpController {
             if(oldValue){
                 String text = tfPhone.getText();
                 boolean valid = text.matches("[0-9 +]+");
+                //Validates that it has the right format
                 if(!valid){
                     throw new Exception("Phone format invalid");
                 }
+                //Validates the length of the text
                 if(text.length()>15){
                     throw new Exception("Phone number too long");
                 }
+                //Checks if its empty
                 if(text.isEmpty()){
                     throw new Exception("Phone number is empty");
                 }
@@ -523,12 +538,15 @@ public class SignUpController {
             if(oldValue){
                 String text = tfEmail.getText();
                 String patronEmail = "^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
+                //Checks if its empty
                 if(text.isEmpty()){
                     throw new Exception("Email is empty");
                 }
+                //Validates the length of the text
                 if(text.length()>100){
                     throw new Exception("Email too long");
                 }
+                //Validates that it has the right patron
                 if(!text.matches(patronEmail)){
                     throw new Exception("Email format not valid");
                 }
@@ -559,9 +577,11 @@ public class SignUpController {
             if(oldValue){
                 String text = pfPassw.getText();
                 String passwReq = "^(?=.*[A-Z])(?=.*\\d).{5,30}$";
+                //Checks if its empty
                 if(text.isEmpty()){
                     throw new Exception("Password is empty");
                 }
+                //Validates if it matches the requirements
                 if(!text.matches(passwReq)){
                     throw new Exception("Password introduced not valid");
                 }
@@ -592,12 +612,15 @@ public class SignUpController {
             
         String text = pfConfPassw.getText();
         String passwReq = "^(?=.*[A-Z])(?=.*\\d).{6,29}$";
+        //Checks if its empty
         if(text.isEmpty()){
            throw new Exception("Password is empty");
         }
+        //Validates if it matches the requirements
         if(!text.matches(passwReq)){
            throw new Exception("Password introduced not valid");
         }
+        //Validates if its the same as the password field
         if(!text.equals(pfPassw.getText())){
            throw new Exception("The password entered does not match ");
         }
@@ -616,7 +639,10 @@ public class SignUpController {
         }  
           
     } 
-    
+    /**
+     * Method for handling the click on the hyperlink
+     * @param event 
+     */
     private void handleHyperlinkOnAction(ActionEvent event){
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ProjectInterfacesController.java"));
