@@ -24,13 +24,13 @@ import javax.ws.rs.client.WebTarget;
  *
  * @author felipe
  */
-public class CustomerRESTClient1 {
+public class CustomerRESTClient {
 
     private WebTarget webTarget;
     private Client client;
     private static final String BASE_URI = "http://localhost:8080/CRUDBankServerSide/webresources";
 
-    public CustomerRESTClient1() {
+    public CustomerRESTClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("customer");
     }
