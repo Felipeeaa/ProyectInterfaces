@@ -19,6 +19,7 @@ import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import java.lang.Exception;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
@@ -100,6 +101,8 @@ public class SignUpController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Sign Up");
+        
+        
         stage.setResizable(false);
         bbutton.setDisable(true);
         
@@ -193,6 +196,11 @@ public class SignUpController {
             //Alert showing it went through
             new Alert(AlertType.INFORMATION,"Succesfully registered!").showAndWait();
             LOGGER.info("Customer created successfuly");
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ProjectInterfacesController.java"));
+            Parent root = loader.load();
+            Scene scene = ((Node)event.getSource()).getScene();
+            scene.getRoot();
         }
         //Catch server error 500
         catch(InternalServerErrorException e){
@@ -646,8 +654,8 @@ public class SignUpController {
     private void handleHyperlinkOnAction(ActionEvent event){
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ProjectInterfacesController.java"));
-            Parent root = (Parent)loader.load();
-            Scene scene = new Scene(root);
+            Parent root = loader.load();
+            Scene scene = ((Node)event.getSource()).getScene();
             scene.getRoot();
         }
         catch(Exception e){
