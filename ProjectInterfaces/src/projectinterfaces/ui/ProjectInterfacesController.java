@@ -132,12 +132,12 @@ public class ProjectInterfacesController {
             alert.setContentText("¡Welcome "+customer.getFirstName()+"!");
             alert.showAndWait();
         //Abrir la ventana de change password
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ChangePassword.fxml"));
+        /*FXMLLoader loader = new FXMLLoader(getClass().getResource("ChangePassword.fxml"));
         Parent root = (Parent)loader.load();
         ChangePasswordController controller = loader.getController();
         
         controller.setCustomer(customer);
-        controller.init(stage, root);
+        controller.init(stage, root);*/
           
 
             
