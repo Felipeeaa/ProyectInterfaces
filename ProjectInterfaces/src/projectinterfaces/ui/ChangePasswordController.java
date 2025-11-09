@@ -52,20 +52,20 @@ public class ChangePasswordController {
     }
     
     public void init(Stage stage, Parent root) {
-        //Establecer el titulo de la ventana
+        //Set the window title
         stage.setTitle("Change Password");
-        //La ventana no debe ser redimensionable
+        //The window must not be resizable
         stage.setResizable(false);
-        //El botón Change Password está deshabilitado hasta que los campos estén completos.
+        //The Change Password button is disabled until the fields are complete
         btChangePass.setDisable(true);
-        //El botón Cancel está habilitado.
+        //The "Cancel" button is enabled
         btExit.setDisable(false);
         //asociar eventos a manejadores
         btChangePass.setOnAction(this::handlebtChangePassOnAction);
         btExit.setOnAction(this::handlebtExitOnAction);
         //Asiciacion de manejadores a properties
-        tfOldPass.focusedProperty().addListener(this::handletfOldPassChange);
-        tfNewPass.focusedProperty().addListener(this::handletfNewPassFocusChange);
+        tfOldPass.focusedProperty().addListener(this::handletfOldPassOnFocusChange);
+        tfNewPass.focusedProperty().addListener(this::handletfNewPassOnFocusChange);
         tfConfirmNewPass.textProperty().addListener(this::handletfConfirmNewPassOnFocusChange);
         
         stage.show();
@@ -78,17 +78,27 @@ public class ChangePasswordController {
      * @param oldValue
      * @param newValue 
      */
-    private void handletfOldPassChange(ObservableValue observable,Object oldValue,Object newValue){
+    private void handletfOldPassOnFocusChange(ObservableValue observable,Boolean oldValue,Boolean newValue){
         try{
-                String pass = tfOldPass.getText();
-                if(pass.isEmpty()){
-                    btChangePass.setDisable(true);
-                    throw new Exception ("Old Password is empty");
-                }
-                //if(!pass.equals(customer.getPassword()))
-                  //  throw new Exception("Incorrect password");
-                tfOldPass.setStyle("-fx-border-color: green; -fx-border-width: 1px;");
-                lbOldErrorLabel.setText("");
+            if(oldValue){
+            String pass = tfOldPass.getText();
+            if(pass.isEmpty()){
+                btChangePass.setDisable(true);
+                throw new Exception ("Old Password is empty");
+            }
+            /*if(!pass.equals(customer.getPassword()))
+                throw new Exception("Incorrect password");*/
+            
+            boolean oldPassValid = !tfOldPass.getText().trim().isEmpty();
+            boolean newPassValid = !tfNewPass.getText().trim().isEmpty();
+            boolean confirmNewPassValid = !tfConfirmNewPass.getText().trim().isEmpty();
+            //Button "changes password" is avalible only if all the fields are with content
+            boolean camposCompletos = oldPassValid && newPassValid && confirmNewPassValid;
+            btChangePass.setDisable(!camposCompletos);
+            
+            tfOldPass.setStyle("-fx-border-color: green; -fx-border-width: 1px;");
+            lbOldErrorLabel.setText("");
+            }
         }catch (Exception e){
             tfOldPass.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             lbOldErrorLabel.setText(e.getMessage());
@@ -101,8 +111,9 @@ public class ChangePasswordController {
      * @param oldValue
      * @param newValue 
      */
-    private void handletfNewPassFocusChange(ObservableValue observable,Object oldValue,Object newValue){
+    private void handletfNewPassOnFocusChange(ObservableValue observable,Boolean oldValue,Boolean newValue){
         try{
+            if(oldValue){
                 String pass = tfNewPass.getText();
                 String passValid = "^(?=.*[A-Z])(?=.*\\d).{5,30}$";
                 
@@ -112,13 +123,19 @@ public class ChangePasswordController {
                 }        
                 if(tfOldPass.getText().equals(tfNewPass.getText()))
                     throw new Exception ("The new password is the same as the previous one");
-                if(pass.length()<5)
-                    throw new Exception ("The password is too short");
                 if(!pass.matches(passValid))
                     throw new Exception ("Password Introduced not valid");
                 
+                boolean oldPassValid = !tfOldPass.getText().trim().isEmpty();
+                boolean newPassValid = !tfNewPass.getText().trim().isEmpty();
+                boolean confirmNewPassValid = !tfConfirmNewPass.getText().trim().isEmpty();
+                //Button "changes password" is avalible only if all the fields are with content
+                boolean camposCompletos = oldPassValid && newPassValid && confirmNewPassValid;
+                btChangePass.setDisable(!camposCompletos);
+                
                 tfNewPass.setStyle("-fx-border-color: green; -fx-border-width: 1px;");
                 lbNewErrorLabel.setText("");
+            }
         }catch (Exception e){
             tfNewPass.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             lbNewErrorLabel.setText(e.getMessage());
@@ -133,6 +150,7 @@ public class ChangePasswordController {
      */
     private void handletfConfirmNewPassOnFocusChange(ObservableValue observable,Object oldValue,Object newValue){
         try{
+            
             if(!tfNewPass.getText().equals(tfConfirmNewPass.getText())){
                 throw new Exception ("The password is not the same");  
             }
@@ -140,9 +158,10 @@ public class ChangePasswordController {
             boolean oldPassValid = !tfOldPass.getText().trim().isEmpty();
             boolean newPassValid = !tfNewPass.getText().trim().isEmpty();
             boolean confirmNewPassValid = !tfConfirmNewPass.getText().trim().isEmpty();
+            //Button "changes password" is avalible only if all the fields are with content
             boolean camposCompletos = oldPassValid && newPassValid && confirmNewPassValid;
-            // El botón solo se habilita si todos los campos tienen texto
             btChangePass.setDisable(!camposCompletos);
+            
             tfConfirmNewPass.setStyle("-fx-border-color: green; -fx-border-width: 1px;");
             lbConfirmErrorLabel.setText("");
             
@@ -158,13 +177,23 @@ public class ChangePasswordController {
      */
     private void handlebtChangePassOnAction(ActionEvent event){
         try{
+            if(tfOldPass.getText().isEmpty() || !tfNewPass.getText().matches("^(?=.*[A-Z])(?=.*\\d).{5,30}$")){
+                throw new Exception("Old Password field is not valid");
+            }
+            if(tfNewPass.getText().isEmpty() || !tfNewPass.getText().matches("^(?=.*[A-Z])(?=.*\\d).{5,30}$")){
+                throw new Exception("NEw Password field is not valid");
+            }
+            if(!tfConfirmNewPass.getText().equals(tfConfirmNewPass.getText())){
+                throw new Exception("Password is not the same");
+            }
             
             boolean oldPassValid = !tfOldPass.getText().trim().isEmpty();
             boolean newPassValid = !tfNewPass.getText().trim().isEmpty();
             boolean confirmNewPassValid = !tfConfirmNewPass.getText().trim().isEmpty();
-            //El botón solo se habilita si todos los campos tienen texto
+            //Button "changes password" is avalible only if all the fields are with content
             boolean camposCompletos = oldPassValid && newPassValid && confirmNewPassValid;
             btChangePass.setDisable(!camposCompletos);
+            
             //customer.setPassword(tfConfirmNewPass.getText());
             new Alert(AlertType.INFORMATION,"User password succesfully change!!").showAndWait();
             //Customer.setPassword(tfConfirmNewPass.getText());
@@ -176,7 +205,7 @@ public class ChangePasswordController {
         }catch (Exception e){
             //lbConfirmErrorLabel.setText(e.getMessage());
             new Alert(AlertType.INFORMATION,e.getLocalizedMessage()).showAndWait();
-            LOGGER.warning("Error");
+            //LOGGER.warning("Error");
         }
     }
     /**
@@ -185,27 +214,15 @@ public class ChangePasswordController {
      */
     private void handlebtExitOnAction(ActionEvent event){
         try{
+            new Alert(AlertType.INFORMATION,"Are you sure you want to leave?").showAndWait();
             /*FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/ProjectInterfacesController.fxml"));
             Parent root = (Parent)loader.load();
             ProjectInterfacesController controller = loader.getController();
             controller.init(stage, root);*/
+            
         }catch(Exception e){
             new Alert(AlertType.INFORMATION,e.getLocalizedMessage()).showAndWait();
             LOGGER.warning("Error c");
         }
     }
-    /*private void handleBtCrearOnAction(ActionEvent event){
-        try{
-            //crear objeto customer
-            Customer customer=new Customer();
-            customer.setLastName("");
-            CustomerRESTClient client = new CustomerRESTClient();
-            client.close();
-            new Alert(AlerType.INFORMATION,"User data succesfully registered!!!").showAndWait();
-            
-        }catch(Exception e){
-            LOGGER.warning(e.getLocalisedMessage());
-            new Alert(AlertType.INFORMATION,e.getLocalizedMessage()).showAndWait();
-        }
-    }*/
 }
