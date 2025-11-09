@@ -44,6 +44,7 @@ public class ChangePasswordControllerTest extends ApplicationTest{
         write("asd4Asd");
         verifyThat("#btChangePass",isEnabled());
         clickOn("#btChangePass");
+        
         verifyThat("User password succesfully change!!",isVisible());
         clickOn("Aceptar");      
     }
