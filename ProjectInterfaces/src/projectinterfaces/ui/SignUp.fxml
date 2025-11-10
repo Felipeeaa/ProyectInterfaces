@@ -33,7 +33,7 @@
       <Button fx:id="bbutton" layoutX="458.0" layoutY="682.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="109.0" text="Register" />
       <ImageView fitHeight="105.0" fitWidth="265.0" layoutX="369.0" layoutY="122.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../Descargas/Captura%20de%20pantalla%20-2025-10-17%2012-50-03.png" />
+            <Image url="@resources/Logo.png" />
          </image>
       </ImageView>
       <Label layoutX="374.0" layoutY="652.0" text="Already have an account?" />
