@@ -56,6 +56,7 @@ public class ProjectInterfacesController {
         Scene scene = new Scene(root);
         //Se establecen las propiedades de la vetana.
         stage.setScene(scene);
+        this.stage=stage;
         //Establecer el titulo de la ventana
         stage.setTitle("Sign In");
         //La ventana no es redimensionable
@@ -100,8 +101,9 @@ public class ProjectInterfacesController {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("SignUp.fxml"));
             Parent root = loader.load();
-            Scene scene = ((Node)event.getSource()).getScene();
-            scene.setRoot(root);
+            
+           SignUpController controller = loader.getController();
+            controller.init(this.stage,root);
             
 
         } catch (Exception e) {
@@ -132,12 +134,12 @@ public class ProjectInterfacesController {
             alert.setContentText("¡Welcome "+customer.getFirstName()+"!");
             alert.showAndWait();
         //Abrir la ventana de change password
-        /*FXMLLoader loader = new FXMLLoader(getClass().getResource("ChangePassword.fxml"));
+        /*FXMLLoader loader = new FXMLLoader(getClass().getResource("ChangePasswordController.java"));
         Parent root = (Parent)loader.load();
         ChangePasswordController controller = loader.getController();
         
         controller.setCustomer(customer);
-        controller.init(stage, root);*/
+        controller.init(this.stage, root);*/
           
 
             

@@ -19,7 +19,7 @@ import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isFocused;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
-import projectinterfaces.SignUpApplication;
+import projectinterfaces.ProjectInterfacesApplication;
 
 /**
  *
@@ -36,7 +36,7 @@ public class SignUpControllerTest extends ApplicationTest{
     
     @Override
     public void start(Stage stage) throws Exception{
-        new SignUpApplication().start(stage);
+        new ProjectInterfacesApplication().start(stage);
     }
 
     @Test

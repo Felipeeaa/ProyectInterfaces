@@ -79,6 +79,7 @@ public class SignUpController {
     private Label errorLabelConfPassw;
     //Logger for notifying errors
     private static final Logger LOGGER=Logger.getLogger("projectinterfaces.ui");
+    private Stage stage;
     //Variables used for validating the textField
     boolean fieldNameValid = false;
     boolean fieldSurNameValid = false;
@@ -100,6 +101,7 @@ public class SignUpController {
         //Initializing the window
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        this.stage=stage;
         stage.setTitle("Sign Up");
         
         
@@ -122,6 +124,7 @@ public class SignUpController {
         tfEmail.focusedProperty().addListener(this::handleEmailFocusChange);
         pfPassw.focusedProperty().addListener(this::handlePasswFocusChange);
         pfConfPassw.textProperty().addListener(this::handleConfirmPasswTextChange);
+       
         
                 
         stage.show();
@@ -653,10 +656,12 @@ public class SignUpController {
      */
     private void handleHyperlinkOnAction(ActionEvent event){
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ProjectInterfacesController.java"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("ProyectoSignIn.fxml"));
             Parent root = loader.load();
-            Scene scene = ((Node)event.getSource()).getScene();
-            scene.getRoot();
+            
+            ProjectInterfacesController controller = loader.getController();
+            controller.init(this.stage,root);
         }
         catch(Exception e){
             LOGGER.info(e.getMessage());
