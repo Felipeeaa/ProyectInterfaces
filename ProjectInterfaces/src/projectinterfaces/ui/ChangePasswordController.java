@@ -11,13 +11,17 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
+import javax.ws.rs.InternalServerErrorException;
+import projectinterfaces.logic.CustomerRESTClient;
 import projectinterfaces.model.Customer;
 
 /**
@@ -44,14 +48,19 @@ public class ChangePasswordController {
     @FXML
     private Label lbConfirmErrorLabel;
     private Customer customer;
-    
+    private Stage stage;
     
     private static final Logger LOGGER = Logger.getLogger("ProjectInterfacesApplication.ui");
+    
     public void setCustomer(Customer customer){
         this.customer = customer;
     }
     
     public void init(Stage stage, Parent root) {
+        Scene scene = new Scene(root);
+        
+        stage.setScene(scene);
+        this.stage=stage;
         //Set the window title
         stage.setTitle("Change Password");
         //The window must not be resizable
@@ -193,7 +202,17 @@ public class ChangePasswordController {
             //Button "changes password" is avalible only if all the fields are with content
             boolean camposCompletos = oldPassValid && newPassValid && confirmNewPassValid;
             btChangePass.setDisable(!camposCompletos);
+
+            CustomerRESTClient restClient = new CustomerRESTClient();
+            customer = restClient.findCustomerByEmailPassword_XML(Customer.class,customer.getEmail(),customer.getPassword());
             
+            //customer.setId(customer.getId());
+            customer.setPassword(tfConfirmNewPass.getText());
+            // Llamar al método PUT del cliente REST
+            restClient.edit_XML(customer, customer.getId());
+             
+            restClient.close();
+
             //customer.setPassword(tfConfirmNewPass.getText());
             new Alert(AlertType.INFORMATION,"User password succesfully change!!").showAndWait();
             //Customer.setPassword(tfConfirmNewPass.getText());
@@ -201,6 +220,10 @@ public class ChangePasswordController {
             Parent root = (Parent)loader.load();
             ProjectInterfacesController controller = loader.getController();
             controller.init(stage, root);*/
+            }
+        //Catch server error 500
+        catch(InternalServerErrorException e){
+            new Alert(AlertType.INFORMATION,"Internal server error, please wait or contact your service provider").showAndWait();
             
         }catch (Exception e){
             //lbConfirmErrorLabel.setText(e.getMessage());
@@ -215,14 +238,24 @@ public class ChangePasswordController {
     private void handlebtExitOnAction(ActionEvent event){
         try{
             new Alert(AlertType.INFORMATION,"Are you sure you want to leave?").showAndWait();
-            /*FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/ProjectInterfacesController.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ProyectoSignIn.fxml"));
             Parent root = (Parent)loader.load();
             ProjectInterfacesController controller = loader.getController();
-            controller.init(stage, root);*/
+            controller.init(this.stage, root);
+            
+            /*FXMLLoader loader = new FXMLLoader(getClass().getResource("ProjectInterfacesController.java"));
+            Parent root = loader.load();
+            Scene scene = ((Node)event.getSource()).getScene();
+            scene.getRoot();*/
+            
+        }
+        //Catch server error 500
+        catch(InternalServerErrorException e){
+            new Alert(AlertType.INFORMATION,"Internal server error, please wait or contact your service provider").showAndWait();
             
         }catch(Exception e){
             new Alert(AlertType.INFORMATION,e.getLocalizedMessage()).showAndWait();
-            LOGGER.warning("Error c");
+            
         }
     }
 }

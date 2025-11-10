@@ -34,10 +34,12 @@ public class CustomerRESTClient {
         webTarget = client.target(BASE_URI).path("customer");
     }
 
-    public void edit_XML(Object requestEntity) throws InternalServerErrorException {
-        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    public void edit_XML(Object requestEntity, Long id) throws InternalServerErrorException {
+        webTarget
+                .request(javax.ws.rs.core.MediaType.APPLICATION_XML)
+                .put(javax.ws.rs.client.Entity.entity(requestEntity,javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
-
+    
     public void edit_JSON(Object requestEntity) throws ClientErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
