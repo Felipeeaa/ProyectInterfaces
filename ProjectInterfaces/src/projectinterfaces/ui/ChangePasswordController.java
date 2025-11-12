@@ -95,8 +95,8 @@ public class ChangePasswordController {
                 btChangePass.setDisable(true);
                 throw new Exception ("Old Password is empty");
             }
-            /*if(!pass.equals(customer.getPassword()))
-                throw new Exception("Incorrect password");*/
+            if(!pass.equals(customer.getPassword()))
+                throw new Exception("Incorrect password");
             
             boolean oldPassValid = !tfOldPass.getText().trim().isEmpty();
             boolean newPassValid = !tfNewPass.getText().trim().isEmpty();
