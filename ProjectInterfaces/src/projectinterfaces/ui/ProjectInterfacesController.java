@@ -121,9 +121,9 @@ public class ProjectInterfacesController {
     private void handleLoginOnAction(ActionEvent event) {
         try {
             //Comprobación de los campos
-            /*if(this.tfEmail.getText().trim().equals("@ejemplo.com")) {
-            }*/
-            
+            if(!tfEmail.getText().matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$") || tfEmail.getText().isEmpty()){
+                throw new Exception("¡Email and password must be to filled!");
+            }
             //Crear un objeto customer
             CustomerRESTClient client = new CustomerRESTClient();
 
@@ -134,12 +134,12 @@ public class ProjectInterfacesController {
             alert.setContentText("¡Welcome "+customer.getFirstName()+"!");
             alert.showAndWait();
         //Abrir la ventana de change password
-        /*FXMLLoader loader = new FXMLLoader(getClass().getResource("ChangePasswordController.java"));
-        Parent root = (Parent)loader.load();
-        ChangePasswordController controller = loader.getController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ChangePassword.fxml"));
+            Parent root = loader.load();
+            ChangePasswordController controller = loader.getController();
         
-        controller.setCustomer(customer);
-        controller.init(this.stage, root);*/
+            controller.setCustomer(customer);
+            controller.init(this.stage, root);
           
 
             
