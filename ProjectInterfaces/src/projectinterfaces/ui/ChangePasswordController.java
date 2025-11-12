@@ -57,10 +57,11 @@ public class ChangePasswordController {
     }
     
     public void init(Stage stage, Parent root) {
+        this.stage=stage;
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
-        this.stage=stage;
+        
         //Set the window title
         stage.setTitle("Change Password");
         //The window must not be resizable
@@ -95,8 +96,8 @@ public class ChangePasswordController {
                 btChangePass.setDisable(true);
                 throw new Exception ("Old Password is empty");
             }
-            /*if(!pass.equals(customer.getPassword()))
-                throw new Exception("Incorrect password");*/
+            if(!pass.equals(customer.getPassword()))
+                throw new Exception("Incorrect password");
             
             boolean oldPassValid = !tfOldPass.getText().trim().isEmpty();
             boolean newPassValid = !tfNewPass.getText().trim().isEmpty();
@@ -216,10 +217,10 @@ public class ChangePasswordController {
             //customer.setPassword(tfConfirmNewPass.getText());
             new Alert(AlertType.INFORMATION,"User password succesfully change!!").showAndWait();
             //Customer.setPassword(tfConfirmNewPass.getText());
-            /*FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/ProjectInterfacesController.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ProyectoSignIn.fxml"));
             Parent root = (Parent)loader.load();
             ProjectInterfacesController controller = loader.getController();
-            controller.init(stage, root);*/
+            controller.init(stage, root);
             }
         //Catch server error 500
         catch(InternalServerErrorException e){
@@ -242,11 +243,6 @@ public class ChangePasswordController {
             Parent root = (Parent)loader.load();
             ProjectInterfacesController controller = loader.getController();
             controller.init(this.stage, root);
-            
-            /*FXMLLoader loader = new FXMLLoader(getClass().getResource("ProjectInterfacesController.java"));
-            Parent root = loader.load();
-            Scene scene = ((Node)event.getSource()).getScene();
-            scene.getRoot();*/
             
         }
         //Catch server error 500
