@@ -16,7 +16,7 @@
       <TextField fx:id="tfAdress" layoutX="331.0" layoutY="389.0" prefHeight="25.0" prefWidth="340.0" promptText="58 Charming Way, Santa Rosa Beach, FL 32459" />
       <TextField fx:id="tfCity" layoutX="331.0" layoutY="436.0" prefHeight="25.0" prefWidth="340.0" promptText="Santa rosa beach" />
       <TextField fx:id="tfEmail" layoutX="331.0" layoutY="479.0" prefHeight="25.0" prefWidth="340.0" promptText="samplemail@mydomain.com" />
-      <TextField fx:id="tfPhone" layoutX="331.0" layoutY="526.0" prefHeight="25.0" prefWidth="340.0" promptText="+1 694206767" />
+      <TextField fx:id="tfPhone" layoutX="331.0" layoutY="526.0" prefHeight="25.0" prefWidth="340.0" promptText="694206767" />
       <PasswordField fx:id="pfPassw" layoutX="331.0" layoutY="571.0" prefHeight="25.0" prefWidth="340.0" />
       <PasswordField fx:id="pfConfPassw" layoutX="331.0" layoutY="616.0" prefHeight="25.0" prefWidth="340.0" />
       <Label layoutX="233.0" layoutY="267.0" prefHeight="15.0" prefWidth="76.0" text="First Name " />
@@ -51,7 +51,7 @@
             <Font size="11.0" />
          </font>
          <tooltip>
-            <Tooltip text="Prefix must be &quot;+1&quot;" />
+            <Tooltip text="Enter a valid number" />
          </tooltip>
       </Label>
       <Label layoutX="316.0" layoutY="577.0" text="?" textFill="#4b70db">

@@ -215,10 +215,12 @@ public class SignUpController {
 
             LOGGER.info("Customer created successfuly");
             
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ProjectInterfacesController.java"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("ProyectoSignIn.fxml"));
             Parent root = loader.load();
-            Scene scene = ((Node)event.getSource()).getScene();
-            scene.getRoot();
+            
+            ProjectInterfacesController controller = loader.getController();
+            controller.init(this.stage,root);
         }
         //Catch server error 500
         catch(InternalServerErrorException e){
