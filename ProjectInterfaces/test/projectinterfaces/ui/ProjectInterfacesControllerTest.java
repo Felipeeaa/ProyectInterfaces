@@ -18,6 +18,7 @@ import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText; 
 import projectinterfaces.ProjectInterfacesApplication; 
 import projectinterfaces.model.Customer;
+
 /** *
 •	@author felipe
 */ @FixMethodOrder(MethodSorters.NAME_ASCENDING) public class ProjectInterfacesControllerTest extends ApplicationTest{
@@ -68,13 +69,23 @@ public void test4_NotAuthorizedException(){
     clickOn("Aceptar");
 }
 @Test
-public void test5_RegisterisEnabled(){
-    clickOn("#Register");
-    verifyThat("¡Error, when going to registry!", isVisible());
+public void test5_ChangePassword(){
+    clickOn("#tfEmail");
+    write("jsmith@enterprise.net");
+    clickOn("#pfPassword");
+    write("abcd*1234");
+    verifyThat("#btnLogin", isEnabled());
+    clickOn("#btnLogin");
+    verifyThat("Aceptar", isVisible());
     clickOn("Aceptar");
 }
 @Test
-public void test6_ExitisEnabled(){
+public void test6_RegisterisEnabled(){
+    clickOn("#Register");
+    verifyThat("#bbutton", isVisible());
+}
+@Test
+public void test7_ExitisEnabled(){
     clickOn("#btnExit");
     verifyThat("Are you sure you want to go out?", isVisible());
     clickOn("Sí");

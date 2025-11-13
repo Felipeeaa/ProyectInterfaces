@@ -19,13 +19,14 @@ import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import projectinterfaces.ChangePasswordAplication;
 
 
+
 /**
  *
  * @author miguel
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ChangePasswordControllerTest extends ApplicationTest{
-    
+    @Override
     public void start(Stage stage) throws Exception {
        new ChangePasswordAplication().start(stage);
     }
