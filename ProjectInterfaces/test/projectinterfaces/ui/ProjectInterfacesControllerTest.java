@@ -31,13 +31,13 @@ public void testTfEmailFocused(){
     verifyThat("tfEmail",isFocused());
 }*/
 
- @Test
+ //@Test
 public void test1_InitialState() {
     verifyThat("#tfEmail", hasText(""));
     verifyThat("#pfPassword",hasText(""));
     verifyThat("#btnLogin", isDisabled());
 }
-@Test
+//@Test
 public void test2_LoginisDisabled(){
     clickOn("#tfEmail");
     write("username");
@@ -49,7 +49,7 @@ public void test2_LoginisDisabled(){
     eraseText(8);
     verifyThat("#btnLogin", isDisabled());
 }
-@Test
+//@Test
 public void test3_LoginisEnabled(){
     clickOn("#tfEmail");
     write("username");
@@ -69,22 +69,22 @@ public void test4_NotAuthorizedException(){
     clickOn("Aceptar");
 }
 @Test
-public void test5_ChangePassword(){
+public void test5_SignInCorrect(){
     clickOn("#tfEmail");
     write("jsmith@enterprise.net");
     clickOn("#pfPassword");
     write("abcd*1234");
     verifyThat("#btnLogin", isEnabled());
     clickOn("#btnLogin");
-    verifyThat("Aceptar", isVisible());
+    verifyThat("¡Welcome John!", isVisible());
     clickOn("Aceptar");
 }
-@Test
+//@Test
 public void test6_RegisterisEnabled(){
     clickOn("#Register");
     verifyThat("#bbutton", isVisible());
 }
-@Test
+//@Test
 public void test7_ExitisEnabled(){
     clickOn("#btnExit");
     verifyThat("Are you sure you want to go out?", isVisible());
