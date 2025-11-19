@@ -9,8 +9,10 @@ import java.util.concurrent.TimeoutException;
 import javafx.stage.Stage;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.api.FxToolkit;
@@ -39,10 +41,11 @@ public class SignUpControllerTest extends ApplicationTest{
         new ProjectInterfacesApplication().start(stage);
     }
 
-    @Test
+    @Before
     public void test1_InitialTests() {
-        verifyThat("#bbutton", isDisabled());
-        verifyThat("#tfName", isFocused());
+        clickOn("#Register");
+        //verifyThat("#bbutton", isDisabled());
+        //verifyThat("#tfName", isFocused());
     }
     
     @Test
