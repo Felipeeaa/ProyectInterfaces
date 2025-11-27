@@ -66,6 +66,9 @@ public class ChangePasswordController {
         stage.setTitle("Change Password");
         //The window must not be resizable
         stage.setResizable(false);
+        
+        //stage.setOnCloseRequest();
+        
         //The Change Password button is disabled until the fields are complete
         btChangePass.setDisable(true);
         //The "Cancel" button is enabled
@@ -134,7 +137,7 @@ public class ChangePasswordController {
                 if(tfOldPass.getText().equals(tfNewPass.getText()))
                     throw new Exception ("The new password is the same as the previous one");
                 if(!pass.matches(passValid))
-                    throw new Exception ("Password Introduced not valid");
+                    throw new Exception ("The New Password neew at least 1 Capital,1 lower case and at least 5 characters");
                 
                 boolean oldPassValid = !tfOldPass.getText().trim().isEmpty();
                 boolean newPassValid = !tfNewPass.getText().trim().isEmpty();
@@ -171,7 +174,7 @@ public class ChangePasswordController {
             //Button "changes password" is avalible only if all the fields are with content
             boolean camposCompletos = oldPassValid && newPassValid && confirmNewPassValid;
             btChangePass.setDisable(!camposCompletos);
-            
+   
             tfConfirmNewPass.setStyle("-fx-border-color: green; -fx-border-width: 1px;");
             lbConfirmErrorLabel.setText("");
             
@@ -187,11 +190,11 @@ public class ChangePasswordController {
      */
     private void handlebtChangePassOnAction(ActionEvent event){
         try{
-            if(tfOldPass.getText().isEmpty() || !tfNewPass.getText().matches("^(?=.*[A-Z])(?=.*\\d).{5,30}$")){
+            if(tfOldPass.getText().isEmpty()){
                 throw new Exception("Old Password field is not valid");
             }
             if(tfNewPass.getText().isEmpty() || !tfNewPass.getText().matches("^(?=.*[A-Z])(?=.*\\d).{5,30}$")){
-                throw new Exception("NEw Password field is not valid");
+                throw new Exception("The New Password neew at least 1 Capital,1 lower case and at least 5 characters");
             }
             if(!tfConfirmNewPass.getText().equals(tfConfirmNewPass.getText())){
                 throw new Exception("Password is not the same");
