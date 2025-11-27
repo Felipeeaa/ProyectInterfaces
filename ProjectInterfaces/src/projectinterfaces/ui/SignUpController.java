@@ -29,6 +29,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import javafx.stage.WindowEvent;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.InternalServerErrorException;
 import projectinterfaces.logic.CustomerRESTClient;
@@ -116,6 +117,7 @@ public class SignUpController {
         
 
         stage.setResizable(false);
+        bbutton.setDefaultButton(true);
         bbutton.setDisable(true);
         
         
@@ -136,11 +138,9 @@ public class SignUpController {
         tfEmail.focusedProperty().addListener(this::handleEmailFocusChange);
         pfPassw.focusedProperty().addListener(this::handlePasswFocusChange);
         pfConfPassw.textProperty().addListener(this::handleConfirmPasswTextChange);
-
-       
-
         
-                
+
+              
         stage.show();
         
     }
@@ -634,7 +634,10 @@ public class SignUpController {
                 //Validates if it matches the requirements
 
                 if(!text.matches(passwReq)){
-                    throw new Exception("Password introduced not valid");
+                    throw new Exception("Requirements:\n"
+                            + "-Between 5 and 30 characters\n"
+                            + "-Must contain an uppercase\n"
+                            + "-Must contain a number");
                 }
                 pfPassw.setStyle("-fx-border-color:green");
                 errorLabelPassw.setText("");
@@ -666,11 +669,14 @@ public class SignUpController {
         String passwReq = "^(?=.*[A-Z])(?=.*\\d).{6,29}$";
         //Checks if its empty
         if(text.isEmpty()){
-           throw new Exception("Password is empty");
+           throw new Exception("Confirm password is empty");
         }
         //Validates if it matches the requirements
         if(!text.matches(passwReq)){
-           throw new Exception("Password introduced not valid");
+           throw new Exception("Requirements:\n"
+                            + "-Between 5 and 30 characters\n"
+                            + "-Must contain an uppercase\n"
+                            + "-Must contain a number");
         }
         //Validates if its the same as the password field
 
@@ -685,8 +691,8 @@ public class SignUpController {
         
         catch(Exception e){
             pfConfPassw.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-            errorLabelConfPassw.setText(e.getMessage());
-            errorLabelConfPassw.setStyle("-fx-text-fill: red");
+            errorLabelPassw.setText(e.getMessage());
+            errorLabelPassw.setStyle("-fx-text-fill: red");
             bbutton.setDisable(true);
             LOGGER.info(e.getMessage());
         }  
@@ -710,7 +716,7 @@ public class SignUpController {
             LOGGER.info(e.getMessage());
         }
     }
-
+    
     
     /**
      * Method for validating that all fields are correct
