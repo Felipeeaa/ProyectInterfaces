@@ -22,6 +22,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAuthorizedException;
 import projectinterfaces.logic.CustomerRESTClient;
@@ -72,9 +73,12 @@ public class ProjectInterfacesController {
         pfPassword.textProperty().addListener(this::textChangeListener);
         tfEmail.focusedProperty().addListener(this::handletfEmailFocusChange);
         pfPassword.focusedProperty().addListener(this::handlepfPasswordFocusChange);
+        
 
         //Mostrar la ventana
         stage.show();
+        //Cerrar la ventana
+        stage.setOnCloseRequest(this::handleClose);
     }
     /**
     * Inicializa la etapa principal de la ventana Iniciar sesión.
@@ -262,5 +266,12 @@ public class ProjectInterfacesController {
     * @param oldValue El estado de enfoque anterior.
     * @param newValue El nuevo estado de foco (verdadero si el campo tiene foco).
     */
-
+    /**
+     * Maneja el evento de salir al pulsar la x para lanzar un mensaje de confirmacion.
+     * @param event 
+     */
+   private void handleClose(WindowEvent event){
+        handleAlert("Are you sure you want to go out?");
+            stage.close();
+    }
 }
