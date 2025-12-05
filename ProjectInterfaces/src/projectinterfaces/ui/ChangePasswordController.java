@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -57,7 +58,9 @@ public class ChangePasswordController {
     }
     
     public void init(Stage stage, Parent root) {
+        
         this.stage=stage;
+        
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
@@ -80,6 +83,14 @@ public class ChangePasswordController {
         tfOldPass.focusedProperty().addListener(this::handletfOldPassOnFocusChange);
         tfNewPass.focusedProperty().addListener(this::handletfNewPassOnFocusChange);
         tfConfirmNewPass.textProperty().addListener(this::handletfConfirmNewPassOnFocusChange);
+        
+        
+        
+        
+        //stage.setOnCloseRequest(this:: handlebtExitOnAction);
+        
+        
+        
         
         stage.show();
         
@@ -257,4 +268,20 @@ public class ChangePasswordController {
             
         }
     }
+    
+    /**
+     * Evento para cerrar la ventana en vez de la aplicación
+     * 
+     * @param event
+     */
+   /* private void handlebtExitOnAction(Event event){
+        try{
+            this.stage.close();
+            event.consume();
+        }
+        catch(Exception e){
+            LOGGER.info(e.getMessage());
+        }
+    }*/
+    
 }
