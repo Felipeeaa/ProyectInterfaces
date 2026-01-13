@@ -6,9 +6,11 @@
 package projectinterfaces.ui;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import javafx.beans.property.SimpleStringProperty;
+import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,16 +23,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javax.ws.rs.InternalServerErrorException;
-import projectinterfaces.logic.CustomerRESTClient;
+import projectinterfaces.logic.MovementRESTClient;
 import projectinterfaces.model.Customer;
+import projectinterfaces.model.Movement;
 
 /**
  *
@@ -43,7 +44,7 @@ public class MovementController {
     private Button btUndo;
     @FXML
     private Button btCancel;
-    @FXML
+    /*@FXML
     private TableView tbMovement;
     @FXML
     private TableColumn tbColDate;
@@ -54,6 +55,19 @@ public class MovementController {
     @FXML
     private TableColumn tbColBalance;
     @FXML
+    */
+    @FXML
+    private TableView<Movement> tbMovement;
+    @FXML
+    private TableColumn<Movement, Date> tbColDate;
+    @FXML
+    private TableColumn<Movement, String> tbColAmount;
+    @FXML
+    private TableColumn<Movement, String> tbColType;
+    @FXML
+    private TableColumn<Movement, String> tbColBalance;
+
+    //
     private SplitMenuButton selectAccount;
     @FXML
     private DatePicker datePickDesde;
@@ -62,7 +76,9 @@ public class MovementController {
     
     private Customer customer;
     private Stage stage;
-    CustomerRESTClient restClient = new CustomerRESTClient();
+    private static final Logger LOGGER = Logger.getLogger("ProjectInterfacesApplication.ui");
+    
+    MovementRESTClient restClient = new MovementRESTClient();
     
     public void init(Stage stage, Parent root) {
         
@@ -76,38 +92,49 @@ public class MovementController {
         //stage.setOnCloseRequest();
         
         btNewMovement.setDisable(false);
-        btUndo.setDisable(false);
+        btUndo.setDisable(true);
         btCancel.setDisable(false);
 
         btNewMovement.setOnAction(this::handlebtNewMovementOnAction);
         btUndo.setOnAction(this::handlebtUndoOnAction);
         btCancel.setOnAction(this::handlebtCancelOnAction);
         
-        tbColDate.setCellValueFactory(new PropertyValueFactory<>("Date"));
-        tbColAmount.setCellValueFactory(new PropertyValueFactory<>("Amount"));
-        tbColType.setCellValueFactory(new PropertyValueFactory<>("Type"));
-        tbColBalance.setCellValueFactory(new PropertyValueFactory<>("Balance"));
+        tbColDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        tbColAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        tbColType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        tbColBalance.setCellValueFactory(new PropertyValueFactory<>("balance"));
         tbMovement.getSelectionModel().selectedItemProperty().addListener(this::handleMovementTableSelectionChanged);
         
         try{
-            List<Customer> userData = new ArrayList<>();
-            userData = FXCollections.observableArrayList(restClient.findAll_XML(userData.getClass()));
+            /*List<Movement> movementData = new ArrayList<>();
+            movementData = FXCollections.observableArrayList(restClient.findMovementByAccount_XML(Movement.class,"2654785441"));
+            tbMovement.setItems((ObservableList) movementData);
+            */
             
-            tbMovement.setItems((ObservableList) userData);
+            ObservableList<Movement> movementData =
+            FXCollections.observableArrayList(
+                restClient.findMovementByAccount_XML(Movement.class, "2654785441")
+            );
+
+            LOGGER.info(movementData.toString());
+            tbMovement.setItems(movementData);
+            
+            
             
         }catch(Exception e){
-            
+            //new Alert(AlertType.INFORMATION,e.getLocalizedMessage()).showAndWait();
+            //LOGGER.warning(e.getLocalizedMessage());
+           LOGGER.info(e.getMessage());  
         }
         
         stage.show();
         
-        
     }
-    
     
     public void setCustomer(Customer customer){
         this.customer = customer;
     }
+    
     private void handleMovementTableSelectionChanged(ObservableValue observable, Object odlValue, Object newValue){
         
     }
@@ -137,10 +164,12 @@ public class MovementController {
     }
     
     private void handlebtUndoOnAction(ActionEvent event){
-        
+        tbMovement.getItems().remove(tbMovement.getSelectionModel().getSelectedItem());
+        tbMovement.refresh();
     }
     
     private void handlebtNewMovementOnAction(ActionEvent event){
+       //tbMovement.getItems().add(new Movement(tbColDate.getTimestamp(),tbColAmount.getAmount()));
         
     }
     
