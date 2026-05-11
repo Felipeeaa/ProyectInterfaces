@@ -28,3 +28,9 @@ El código está organizado siguiendo principios de diseño modular para facilit
 1. Clona el repositorio:
    ```bash
    git clone [https://github.com/Felipeeaa/ProyectInterfaces.git](https://github.com/Felipeeaa/ProyectInterfaces.git)
+   
+2.Importa el proyecto en tu IDE favorito (IntelliJ, Eclipse o NetBeans).
+
+3.Asegúrate de tener instalado el JDK 8 o superior.
+
+4.Ejecuta la clase principal.
